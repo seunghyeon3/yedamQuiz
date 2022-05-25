@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
+<h1>사원등록</h1>
+<form action="#" th:action="@{insertEmp}" th:object="${empVO}" method="post" encType="multipart/form-data">
+	<div><label for="firstName"  class="form-label">Name</label>
+	<input name="firstName" id="firstName" class="form-control"></div>
+	
+	<div><label for="firstName"  class="form-label">lastName</label>
+	<input name="lastName" id="lastName" class="form-control"></div>
+	
+	<div><label for="email"  class="form-label">email</label> 
+	<input name="email" id="email" th:field="*{email}" class="form-control">
+	<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+	</div> 
+
+	<div><label for="jobid"  class="form-label">jobid</label> 
+	<input name="jobid" id="jobid" class="form-control"></div> 
+		
+	<div><label for="hireDate"  class="form-label">hireDate</label> 
+	<input name="hireDate" id="hireDate" class="form-control"></div> 
+
+	<div><label for="uploadFile"  class="form-label">uploadFile</label> 
+	<input type="file"  name="uploadFile" id="uploadFile" class="form-control"></div> 
+
+	<button class="btn btn-primary">등록</button>
+</form>
+</th:block>
