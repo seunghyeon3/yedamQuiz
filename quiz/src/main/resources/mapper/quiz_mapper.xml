@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.quiz.quiz.mapper.QuizMapper">
+
+<!-- 단건조회  -->
+	<select id="getQuiz" parameterType="QuizVO" resultType="QuizVO">
+		SELECT  *
+		FROM QUIZ
+		WHERE QUIZ_NO = #{quizNo}
+	</select>
+	
+<!-- 전체조회  -->	
+	<select id="getQuizList" resultType="QuizVO">
+		SELECT   QUIZ_NO
+				,SBJT_CD
+				,QUIZ_CTNT
+				,TYP_CD
+				,ANSR
+				,DESCT
+				,USE_YN
+		  FROM QUIZ E	
+		 ORDER BY  QUIZ_NO
+	</select>
+
+    <insert id="insertQuiz" parameterType="QuizVO">
+        INSERT INTO QUIZ (  QUIZ_NO
+							,SBJT_CD
+							,QUIZ_CTNT
+							,TYP_CD
+							,ANSR
+							,DESCT
+							,USE_YN
+                                )
+                        VALUES(
+                                ( SELECT NVL(MAX(QUIZ_NO),0)+1 FROM QUIZ ),
+                                #{sbjtCd},
+                                #{quizCtnt},
+                                #{typCd},
+                                #{ansr},
+                                #{desct},
+                                #{useYn}
+                                )
+    </insert>
+</mapper>

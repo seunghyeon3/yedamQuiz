@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.yedam.quiz;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
