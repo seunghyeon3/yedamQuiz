@@ -14,9 +14,11 @@
 <!-- 전체조회  -->	
 	<select id="getQuizList" resultType="QuizVO">
 		SELECT   QUIZ_NO
-				,SBJT_CD
+				--,SBJT_CD
+		        ,FIND_CD_NM(SBJT_CD, 'SBJT') AS SBJT_CD
 				,QUIZ_CTNT
-				,TYP_CD
+				--,TYP_CD
+				,FIND_CD_NM(TYP_CD, 'TYP')  AS TYP_CD
 				,ANSR
 				,DESCT
 				,USE_YN

@@ -3,34 +3,47 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
-	<h1 class="mt-4">문제은행</h1>
+
+	<!--  페이지 타이틀 -->
+	<h1 class="mt-4">문제은행  </h1>
+	<div th:text="#{aply.end}"></div>
+	<!-- breadcrump / 도움말 -->
     <ol class="breadcrumb mb-4">
+	    <li><a class="float-right" data-bs-toggle="collapse" href="#collapseHelp" role="button" aria-expanded="false" aria-controls="collapseHelp">
+       	<img src="assets/img/free-icon-help-6269920.png" width="20px"></a></li>
         <li class="breadcrumb-item"><a href="index.html">문제은행</a></li>
         <li class="breadcrumb-item active">문제조회</li>
-    </ol>
-    <div class="card mb-4">
-         <div class="card-body">
-             문제은행관리는....
-         </div>
-    </div>
-    <div class="card mb-4">
+    </ol>		
+  
+    <!--  페이지 도움말 시작 -->
+	<div class="collapse  g-3 mb-2" id="collapseHelp">
+		<div class="card card-body">문제은행관리는.<br>. <br>. <br>.</div>
+	</div>
+    <!--  페이지 도움말 종료 -->
+    
+	<div class="card mb-4">
+	    <!--  검색 폼 시작 -->
+        <!-- <i class="fas fa-table me-1"></i> -->
         <div class="card-header">
-            <!-- <i class="fas fa-table me-1"></i> -->
 			<form>
 				<div class="row g-3">
-					<label for="staticEmail2" class="col-sm-2 col-form-label">문제유형</label>
+					<label for="typCd" class="col-sm-2 col-form-label">문제유형</label>
 					<div class="col-sm-3">
-						<select class="form-select"><option>단답</select>
+						<select class="form-select" id="typCd" name="typCd"><option>단답</select>
 					</div>
-					<label for="inputPassword2" class="col-sm-2 col-form-label">과목</label>
+					<label for="sbjtCd" class="col-sm-2 col-form-label">과목</label>
 					<div class="col-sm-3">
-						<select class="form-select"><option>단답</select>
+						<select class="form-select" id="sbjtCd" name="sbjtCd"><option value="1">객관식<option value="2">단답</select>
 					</div>
 				</div>
 				<div class="row g-3">
-					<label for="inputPassword2" class="col-sm-2 col-form-label">문제</label>
+					<label for="useYn" class="col-sm-2 col-form-label">사용여부</label>
 					<div class="col-sm-3">
-						<input type="text" id="inputPassword2" class="form-control" placeholder="내용">
+						<select name="useYn" id="useYn" class="form-select"><option value="Y">사용<option value="N">미사용</select>
+					</div>
+					<label for="quizCtnt" class="col-sm-2 col-form-label">문제</label>
+					<div class="col-sm-3">
+						<input type="text" id="quizCtnt" name="quizCtnt" class="form-control" placeholder="내용">
 					</div>
 				</div>
 				<div class="btn-group" role="group">
@@ -38,27 +51,53 @@
 					<button type="submit" class="btn btn-primary">검색</button>
 				</div>
 			</form>
-
 		</div>
+		<!--  검색폼 종료 -->
+		
+		<!--  문제 목록 시작 -->
         <div class="card-body">
 			<table class="table">
 				<thead>
 					<tr>
 						<th>번호</th>
-						<th>과목</th>
 						<th>문제유형</th>
-						<th>내용</th>
+						<th>과목</th>
+						<th>문제명</th>
+						<th>등록일</th>
+						<th>사용여부</th>
+						<th>출제수</th>
+						<th>정답율</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="quiz : ${quizList}">
 						<td th:text="${quiz.quizNo}">1</td>
-						<td th:text="${quiz.sbjtCd}"></td>
-						<td th:text="${quiz.typCd}"></td>
-						<td th:text="${quiz.quizCtnt}"></td>
+						<td th:text="${quiz.sbjtCd}">중</td>
+						<td th:text="${quiz.typCd}">자바</td>
+						<td th:text="${quiz.quizCtnt}">오버라이딩이란?</td>
+						<td th:text="${quiz.wdt}">2022-01-01</td>
+						<td th:text="${quiz.useYn}">Y</td>
+						<td th:text="${quiz.questCnt}">10</td>
+						<td th:text="${quiz.rightRate}">50%</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
      </div>
+     <!--  문제 목록 종료 -->
+     
+     
+     <!-- 페이징 시작 -->
+	<nav aria-label="...">
+		<ul class="pagination">
+			<li class="page-item disabled"><a class="page-link" href="#"
+				tabindex="-1" aria-disabled="true">Previous</a></li>
+			<li class="page-item"><a class="page-link" href="#">1</a></li>
+			<li class="page-item active" aria-current="page"><a
+				class="page-link" href="#">2</a></li>
+			<li class="page-item"><a class="page-link" href="#">3</a></li>
+			<li class="page-item"><a class="page-link" href="#">Next</a></li>
+		</ul>
+	</nav>
+	<!-- 페이징 종료 -->
 </th:block>
