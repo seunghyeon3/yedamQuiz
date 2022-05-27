@@ -12,7 +12,6 @@ import com.yedam.quiz.quiz.mapper.QuizMapper;
 import com.yedam.quiz.quiz.service.QuizVO;
 
 @SpringBootTest
-//@MybatisTest
 public class QuizMapperTest {
 
 	@Autowired QuizMapper mapper;

@@ -2,17 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/layout}">
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-<!-- 콜렉션없이 단순반복 -->
+
 <th:block layout:fragment="content">
 	<th:block th:each="num : ${#numbers.sequence(1,5)}">
 		<div th:text="${num}"></div>
 		<div th:text="${numStat.index}"></div>
 	</th:block>
 </th:block>
-</body>
-</html>
