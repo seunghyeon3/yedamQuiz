@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
+	
+	<h1 class="mt-4">시험지 등록</h1>
+	
+	<form action="examRegist">
+	<div class="form-gruop">
+	<label> 시험명 *</label>
+	<input type="text" class="form-control" placeholder="디지털컨버전스 기반 Java 개발자 양성과정" id="examNm" name="examNm">
+	<br>
+	<label> 시험 설명</label>
+	<textarea class="form-control" rows="200px" cols="100px" placeholder="시험설명 입력"></textarea>
+	<br>
+	<label> 강의실 *</label>
+	<input type="text" class="form-control" placeholder="1강의실" id="ltRoom" name="ltRoom">
+	<br>  
+	<label> 응시시작일 *</label>
+	<input type="date" class="form-control" id="startDttm" name="startDttm">
+	<br>
+	<label> 응시종료일 * </label>
+	<input type="date" class="form-control" id="endDttm" name="endDttm">
+	<br>
+	<label> 응시인원 *</label>
+	<input type="text" class="form-control" id="rcntCt" name="rcntCt">
+	<br>
+	<label> 사용여부 </label>
+	<input type="checkbox" class="form-control" id="useYn" name="useYn">
+	<br>
+	<label> 총점 *</label>
+	<input type="text" class="form-control" id="ttScor" name="ttScore">	
+	</div>
+	</form>
+</th:block>
