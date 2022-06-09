@@ -13,17 +13,37 @@
 	
 <!-- 전체조회  -->	
 	<select id="getQuizList" resultType="QuizVO">
+	<if test="end>0">
+	SELECT B.* FROM ( SELECT A.*, ROWNUM RN FROM (
+	</if>
 		SELECT   QUIZ_NO
-				--,SBJT_CD
-		        ,FIND_CD_NM(SBJT_CD, 'SBJT') AS SBJT_CD
+				,SBJT_CD
+		        ,FIND_CD_NM(SBJT_CD, 'SBJT') AS SBJT_NM
 				,QUIZ_CTNT
-				--,TYP_CD
-				,FIND_CD_NM(TYP_CD, 'TYP')  AS TYP_CD
+				,TYP_CD
+				,FIND_CD_NM(TYP_CD, 'TYP')  AS TYP_NM
 				,ANSR
 				,DESCT
 				,USE_YN
-		  FROM QUIZ E	
-		 ORDER BY  QUIZ_NO
+		  FROM QUIZ E
+		  <where>
+		  	<if test="typCd != null and typCd != ''">
+		  		AND TYP_CD = #{typCd}
+		  	</if>
+		  	<if test="sbjtCd != null and sbjtCd != ''">
+		  		AND SBJT_CD = #{sbjtCd}
+		  	</if>
+		  	<if test="useYn != null and useYn != ''">
+		  		AND USE_YN = #{useYn}
+		  	</if>
+		  	<if test="quizCtnt != null and quizCtnt != ''">
+		  		AND quiz_ctnt like '%' || #{quizCtnt} || '%'
+		  	</if>
+		  </where>
+		 ORDER BY  QUIZ_NO DESC
+	<if test="end>0">
+	) A ) B WHERE RN BETWEEN #{start} AND #{end}
+	</if>
 	</select>
 
     <insert id="insertQuiz" parameterType="QuizVO">

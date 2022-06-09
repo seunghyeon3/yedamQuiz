@@ -1,9 +1,11 @@
 package com.yedam.quiz.quiz.service;
 
+import com.yedam.quiz.comm.service.SearchVO;
+
 import lombok.Data;
 
 @Data
-public class QuizVO {
+public class QuizVO extends SearchVO {
 	private String quizNo;		//문제번호
 	private String sbjtCd;		//과목코드
 	private String sbjtNm;		//과목명
