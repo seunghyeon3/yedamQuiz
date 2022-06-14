@@ -25,13 +25,16 @@ public class ExamController {
 	
 	@RequestMapping("examRegistForm")
 	public String examRegistForm(Model model) {
-		model.addAttribute("quiz", quizService.getQuizList(null));
+		model.addAttribute("quizList", quizService.getQuizList(null));
+		//훈련생 리스트
+		model.addAttribute("studnetList", null);
 		return "exam/examRegist";
 	}
 	
 	@RequestMapping("examRegist")
-	public void  examRegist() {
-		
+	public String examRegist(ExamVO vo) {
+		examService.insertExam(vo);
+		return "exam/examList";
 	}
 	
 	@RequestMapping("examList")

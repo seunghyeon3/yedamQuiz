@@ -8,7 +8,7 @@
 
 	<h1 class="mt-4">시험지 등록</h1>
 
-	<form action="examRegist" method="get">
+	<form action="examRegist" method="post">
 		<!-- <div class="form-gruop"> -->
 		<label> 시험명 *</label>
 		<input type="text" class="form-control" placeholder="자바 개념 시험지" id="examNm" name="examNm" required> <br>
@@ -41,118 +41,78 @@
 		<br>
 		<div class="row">
 			<div class="col-sm-1">
-			<label> 카테고리 *</label>
+				<label> 카테고리 *</label>
 			</div>
-			<div class="col-sm-11">
-			<!-- DB에 있는 카테고리 호출 예정, 예시로 3개만 코딩 -->
-			<input type="checkbox" id="java" name="java"> <label> 자바 </label>  &nbsp;&nbsp; 
-			<input type="checkbox" id="HTML" name="HTML"> <label> HTML </label> &nbsp;&nbsp;
-			<input type="checkbox" id="CSS" name="CSS"> <label> CSS </label> &nbsp;&nbsp;
+			<div class="col-sm-11" id="checkCategory">
+				<!-- DB에 있는 카테고리 호출 예정, 예시로 3개만 코딩 -->
+				<input type="checkbox" id="java" name="java" value="n"> <label> 자바 </label>  &nbsp;&nbsp; 
+				<input type="checkbox" id="HTML" name="HTML" value="n"> <label> HTML </label> &nbsp;&nbsp;
+				<input type="checkbox" id="CSS" name="CSS" value="n"> <label> CSS </label> &nbsp;&nbsp;
 			</div>
-			<br><br>
+				<br><br>
 			<div class="col-sm-1">
-			<label> 수동/자동 *</label>
+				<label> 수동/자동 *</label>
 			</div>
 			<div class="col-sm-11">
-			<!-- 수동 / 자동값에 따라서 문제 내용이 달라져야함. -->
-			<!-- 수동 / 자동 클릭 후 카테고리 변경이 일어 난다면, 바뀌어야 함. 클릭이벤트 넣어줘야 함 -->
-			<input type="checkbox" id="manual" name="manual"> <label> 수동 </label> &nbsp;&nbsp;
-			<input type="checkbox" id="auto" name="auto"> <label> 자동 </label> &nbsp;&nbsp;
+				<!-- 수동 / 자동값에 따라서 문제 내용이 달라져야함. -->
+				<!-- 수동 / 자동 클릭 후 카테고리 변경이 일어 난다면, 바뀌어야 함. 클릭이벤트 넣어줘야 함 -->
+				<input type="checkbox" id="manual" name="manual" onclick="examList('manual')" value="n"> <label> 수동 </label> &nbsp;&nbsp;
+				<input type="checkbox" id="auto" name="auto" onclick="examList(auto)" value="n"> <label> 자동 </label> &nbsp;&nbsp;
 			</div>
 			<br><br>
+			<div>
 			<div class="col-sm-12">
-			<label>문제 리스트 *</label>
-			
-			<table class="table table-hover" id="quiz">
-				<thead>
-						<tr>
-							<th>퀴즈 선택 여부</th>
-							<th></th>
-							<th>제목</th>
-							<th>배점</th>
-						</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							<input type="checkbox" value="N">
-						</td>
-						<td>
-							자바	
-						</td>
-						<td>
-							자바
-						</td>
-						<td>
-							5
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<input type="checkbox" value="N">
-						</td>
-						<td>
-							JSP	
-						</td>
-						<td>
-							JSP
-						</td>
-						<td>
-							5
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<input type="checkbox" value="N">
-						</td>
-						<td>
-							HTML	
-						</td>
-						<td>
-							HTML
-						</td>
-						<td>
-							10
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			</div>
-		</div>
-		<br> 
-			<label> 사용여부 </label>
-			<input type="checkbox" id="useYn" name="useYn">
-		<br><br>
-			<div class="col-sm-2">
+			<div style="display: none;" id="manualExam">
+				<label>문제 리스트 *</label>
+					<table class="table table-hover" id="quiz">
+						<thead>
+							<tr>
+								<th>선택</th>
+								<th>문제유형</th>
+								<th>과목</th>
+								<th>제목?</th>
+								<th>사용여부</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="quiz : ${quizList}">
+								<td>
+									<input type="checkbox" value="N">
+								</td>
+								<td th:text="${quiz.typCd}"></td>
+								<td th:text="${quiz.sbjtNm}"></td>
+								<td>추가 되어야 하는 부분</td>
+								<td th:text="${quiz.useYn}"></td>
+							</tr>
+						</tbody>
+					</table>
+			<div class="col-sm-1">
 				<label>	총점 *</label>
 				<input type="text" class="form-control" id="ttScor" name="ttScore" required>
 			</div>
+			</div>
+			</div>
+			</div>
+		</div>
 		<br>
 		<div>
 		<label>훈련생 리스트</label>
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th>이름</th>
-					<th>이메일</th>
-					<th>전화번호</th>
+					<th>이름</th>				
+					<th>과정명</th>
+					<th>강의실</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>박</td>
-					<td>111@11.com</td>
-					<td>010-1111-1111</td>
-				</tr>
-				<tr>
-					<td>이</td>
-					<td>222@22.com</td>
-					<td>010-2222-2222</td>
-				</tr>
-				<tr>
-					<td>김</td>
-					<td>333@33.com</td>
-					<td>010-3333-3333</td>
+				<tr th:each="studnetList : ${student}">
+					<td>
+						<input type="checkbox" value="N">
+					</td>
+					<td th:text="${student.stdNm}"></td>
+					<td th:text="${student.corsNm}"></td>
+					<td th:text="${student.ltRoom}"></td>
 				</tr>
 			</tbody>
 		
@@ -162,6 +122,73 @@
 		<input type="submit" class="btn btn-dark" onclick="test" value="등록">
 		</div>
 	</form>
+
+<!-- 	<div class="accordion" id="accordionExample">
+		
+		<div th:each="과정 + 훈련생 내용 : ${}" class="accordion-item">
+		  <h2 class="accordion-header" id="headingOne">
+			<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+			  Accordion Item #1
+			</button>
+		  </h2>
+		  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+			<div class="accordion-body">
+			<th:block th:each="훈련생 : ${}">
+				<input>
+			</th:block>
+			</div>
+		  </div>
+		</div>
+		
+	</div> -->
 	<script>
+	window.onload = function(){		
+
+		let checkCategory = document.getElementById("checkCategory");
+		checkCategory.addEventListener("click", function(ev){
+			console.log(ev.target.value);
+			if(ev.target.value == 'y')
+				ev.target.value = 'n';
+			else
+				ev.target.value = 'y';
+			
+		})
+		
+		let checkList = document.querySelectorAll("#quiz > tbody > tr > td :nth-child(1)");
+		for(list of checkList){
+			if(String(list.value).toLowerCase() == 'n'){
+			}
+				
+		}
+	}
+	function examList(type){
+		let temp = 0;
+		let checkCategory = document.querySelectorAll("#checkCategory > input");
+		for(list of checkCategory){
+			if(list.value == 'y'){
+				temp++;
+			}
+		}
+		//카테고리 골라서 view 해주는거 해줘야함.
+		if(temp > 0){			
+			let exam = document.getElementById('manualExam'); 
+			if(event.target.value == 'n'){
+				if(type == 'manual'){
+					exam.style.display = "block";
+					event.target.value = 'y';
+				}
+				else{
+					//자동일때
+				}
+			}else{
+				exam.style.display = "none";
+				event.target.value = 'n'
+			}	
+		}
+		else{
+			event.target.checked = false;
+			window.alert("카테고리 선택!!!");
+		}
+	}
 	</script>
 </th:block>
