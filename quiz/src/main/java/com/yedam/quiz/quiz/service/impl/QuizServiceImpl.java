@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.quiz.comm.StringUtil;
 import com.yedam.quiz.quiz.mapper.QuizMapper;
 import com.yedam.quiz.quiz.service.QuizService;
 import com.yedam.quiz.quiz.service.QuizVO;
@@ -21,7 +22,11 @@ public class QuizServiceImpl implements QuizService{
 
 	@Override
 	public List<QuizVO> getQuizList(QuizVO quizVO) {
-		return mapper.getQuizList(quizVO);
+		List<QuizVO> list = mapper.getQuizList(quizVO);
+		for(QuizVO vo : list) {
+			vo.setQuizCtnt(StringUtil.abbr(vo.getQuizCtnt()));
+		}
+		return list;
 	}
 
 	@Override
