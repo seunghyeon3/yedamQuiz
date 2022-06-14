@@ -25,43 +25,72 @@
 	    <!--  검색 폼 시작 -->
         <!-- <i class="fas fa-table me-1"></i> -->
         <div class="card-header">
-			<form>
+			<form name="frmSearch" id="frmSearch">
 				<div class="row g-3">
 					<label for="typCd" class="col-sm-2 col-form-label">문제유형</label>
 					<div class="col-sm-3">
-						<select class="form-select" id="typCd" name="typCd"><option>단답</select>
+						<div class="form-check form-check-inline">  
+						  <input class="form-check-input" name="typCd" type="radio" value="" >
+						  <label class="form-check-label" for="typCd" >전체</label>
+						</div>
+						<th:block  th:each="code : ${codes.TYP}">
+						    <div class="form-check form-check-inline">  
+							  <input class="form-check-input" name="typCd" type="radio" id="typCd" th:value="${code.cd}" >
+							  <label class="form-check-label" for="typCd" th:text="${code.nm}">1</label>
+							</div>
+						</th:block>
 					</div>
 					<label for="sbjtCd" class="col-sm-2 col-form-label">과목</label>
 					<div class="col-sm-3">
-						<select class="form-select" id="sbjtCd" name="sbjtCd"><option value="1">객관식<option value="2">단답</select>
+						<select class="form-select" aria-label="Default select example" id="sbjtCd" name="sbjtCd" >
+						  <option selected value="">과목선택</option>  
+						  <option th:each="code : ${codes.SBJT}" 
+						          th:value="${code.cd}" th:text="${code.nm}"
+						          th:selected="${code.cd}==${quizVO.sbjtCd}"></option>
+						</select> 
 					</div>
 				</div>
 				<div class="row g-3">
 					<label for="useYn" class="col-sm-2 col-form-label">사용여부</label>
 					<div class="col-sm-3">
-						<select name="useYn" id="useYn" class="form-select"><option value="Y">사용<option value="N">미사용</select>
+						<!-- <select name="useYn" id="useYn" class="form-select"><option value="Y">사용<option value="N">미사용</select> -->
+						<div class="form-check form-switch">
+						  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="useYn" value="Y" checked>
+						</div>  
 					</div>
 					<label for="quizCtnt" class="col-sm-2 col-form-label">문제</label>
 					<div class="col-sm-3">
-						<input type="text" id="quizCtnt" name="quizCtnt" class="form-control" placeholder="내용">
+						<input type="text" id="quizCtnt" name="quizCtnt" class="form-control" 
+						       th:value="${quizVO.quizCtnt}" placeholder="내용">
 					</div>
 				</div>
 				<div class="btn-group" role="group">
-					<button type="reset" class="btn btn btn-warning">초기화</button>
-					<button type="submit" class="btn btn-primary">검색</button>
+					<button type="button" class="btn btn-warning" id="btnInit">초기화</button>
+					<button type="submit" class="btn btn-primary" id="btnSearch">검색</button>
 				</div>
 			</form>
 		</div>
 		<!--  검색폼 종료 -->
 		
+		<!--  버튼 그룹 시작 -->
+		<div>
+			<button type="button" class="btn btn-outline-primary" id="btnOptDel">선택삭제</button>
+			<button type="button" class="btn btn-outline-primary" id="btnOptUse">선택사용</button>
+			<button type="button" class="btn btn-outline-primary" id="btnOptNoUse">선택미사용</button>
+			<button type="button" class="btn btn-outline-primary" id="btnExcelDown">엑셀다운로드</button>
+			<button type="button" class="btn btn-outline-primary" id="btnReg">개별등록</button>
+			<button type="button" class="btn btn-outline-primary" id="btnBatchReg">일괄등록</button>
+		</div>
+		<!--  버튼 그룹 종료 -->
+	
 		<!--  문제 목록 시작 -->
         <div class="card-body">
 			<table class="table">
 				<thead>
 					<tr>
 						<th>번호</th>
-						<th>문제유형</th>
 						<th>과목</th>
+						<th>문제유형</th>
 						<th>문제명</th>
 						<th>등록일</th>
 						<th>사용여부</th>
@@ -72,12 +101,12 @@
 				<tbody>
 					<tr th:each="quiz : ${quizList}">
 						<td th:text="${quiz.quizNo}">1</td>
-						<td th:text="${quiz.sbjtCd}">중</td>
-						<td th:text="${quiz.typCd}">자바</td>
+						<td th:text="${quiz.sbjtNm}">중</td>
+						<td th:text="${quiz.typNm}">자바</td>
 						<td th:text="${quiz.quizCtnt}">오버라이딩이란?</td>
 						<td th:text="${quiz.wdt}">2022-01-01</td>
 						<td th:text="${quiz.useYn}">Y</td>
-						<td th:text="${quiz.questCnt}">10</td>
+						<td th:text="${#strings.replace(quiz.questCnt, '/(<([^>]+)>)/ig', '')}">10</td>
 						<td th:text="${quiz.rightRate}">50%</td>
 					</tr>
 				</tbody>
@@ -100,4 +129,97 @@
 		</ul>
 	</nav>
 	<!-- 페이징 종료 -->
+	
+	<script>
+	$(function(){
+		
+		searchProc();		//검색
+		initProc();			//초기화
+		optDelProc();  		//선택삭제
+		OptUseProc();  		//선택사용
+		optNoUseProc();		//선택미사용
+		excelDownProc();	//엑셀다운로드
+		regProc();			//개별등록
+		batchRegProc();		//일괄등록
+		
+		/*--------------
+		검색
+		----------------*/
+		function searchProc(){
+			$("#btnSearch").on("click", function(){
+				$("#frmSearch").submit();
+			})
+		}
+		
+		/*--------------
+		초기화
+		----------------*/
+		function initProc(){
+			$("#btnInit").on("click", function(){
+				$("#frmSearch").find('input,select').each(function(){
+					$(this).val('');
+				});
+				$("#frmSearch").find(':radio, :checkbox').each(function(){
+					$(this).val([]);
+				});
+			})
+		}		
+		
+		/*--------------
+		선택삭제
+		----------------*/
+		function optDelProc(){
+			$("#btnOptDel").on("click", function(){
+	
+			})
+		}
+		
+		
+		/*--------------
+		선택사용
+		----------------*/
+		function OptUseProc(){
+			$("#btnOptUse").on("click", function(){
+				
+			})
+		}
+
+		/*--------------
+		선택미사용
+		----------------*/
+		function optNoUseProc(){
+			$("#btnOptNoUse").on("click", function(){
+				
+			})
+		}
+		
+		/*--------------
+		엑셀다운로드
+		----------------*/		
+		function excelDownProc(){
+			$("#btnExcelDown").on("click", function(){
+				
+			})
+		}
+		
+
+		/*--------------
+		개별등록
+		----------------*/	
+		function regProc(){
+			$("#btnReg").on("click", function(){
+				location.href="/quizReg"
+			})
+		}
+		
+		/*--------------
+		일괄등록
+		----------------*/	
+		function batchRegProc(){
+			$("#btnBatchReg").on("click", function(){
+			})
+		}
+	})
+	
+	</script>
 </th:block>
