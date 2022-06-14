@@ -18,7 +18,6 @@ public class ExamServiceImpl implements ExamService{
 
 	@Override
 	public List<ExamVO> getExamList() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
