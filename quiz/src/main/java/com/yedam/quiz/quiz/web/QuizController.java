@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.yedam.quiz.comm.Paging;
 import com.yedam.quiz.comm.service.CodeService;
 import com.yedam.quiz.quiz.service.QuizService;
 import com.yedam.quiz.quiz.service.QuizVO;
@@ -23,9 +24,17 @@ public class QuizController {
 	
 	//문제 목록
 	@GetMapping("/quizList")
-	public String quizList(Model model, QuizVO vo) {
+	public String quizList(Model model, QuizVO vo, Paging paging) {
+		
 		//공통코드조회
 		model.addAttribute("codes", codeService.getCodes("SBJT","TYP"));
+		
+		//페이징처리
+		vo.setStart(paging.getFirst());
+		vo.setEnd(paging.getLast());
+		paging.setTotalRecord(quizService.getCount(vo));
+		model.addAttribute("paging", paging);
+		
 		//문제목록
 		model.addAttribute("quizList", quizService.getQuizList(vo));
 		return "quiz/list";

@@ -115,18 +115,20 @@
      </div>
      <!--  문제 목록 종료 -->
      
-     
-     <!-- 페이징 시작 -->
+    <!-- 페이징 시작 -->
 	<nav aria-label="...">
-		<ul class="pagination">
-			<li class="page-item disabled"><a class="page-link" href="#"
-				tabindex="-1" aria-disabled="true">Previous</a></li>
-			<li class="page-item"><a class="page-link" href="#">1</a></li>
-			<li class="page-item active" aria-current="page"><a
-				class="page-link" href="#">2</a></li>
-			<li class="page-item"><a class="page-link" href="#">3</a></li>
-			<li class="page-item"><a class="page-link" href="#">Next</a></li>
-		</ul>
+	  <ul class="pagination">
+	    <li class="page-item" th:classappend="${paging.startPage} == 1 ? disabled">
+	        <a class="page-link" th:href="${paging.startPage}">Previous</a></li>
+
+	    <li th:each="num : *{#numbers.sequence(paging.startPage, paging.endPage)}" 
+	        class="page-item" 
+	        th:addclass="${num} == ${paging.page} ? active">
+	        <a class="page-link"  th:text="${num}">2</a></li>
+	    
+	    <li class="page-item" th:classappend="${paging.endPage} <= ${paging.lastPage} ? disabled">
+	        <a class="page-link" th:href="${paging.endPage}">Next</a></li>
+	  </ul>
 	</nav>
 	<!-- 페이징 종료 -->
 	
