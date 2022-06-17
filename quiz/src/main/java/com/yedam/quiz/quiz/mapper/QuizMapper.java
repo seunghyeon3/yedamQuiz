@@ -13,4 +13,5 @@ public interface QuizMapper {
     public void insertQuiz(QuizVO quizVO);
     public void updateQuiz(QuizVO quizVO);
     public void deleteQuiz(QuizVO quizVO);
+    public int getCount(QuizVO quizVO);
 }

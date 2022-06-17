@@ -23,8 +23,9 @@ public class QuizServiceImpl implements QuizService{
 	@Override
 	public List<QuizVO> getQuizList(QuizVO quizVO) {
 		List<QuizVO> list = mapper.getQuizList(quizVO);
+		//줄임말 : 태그를 빼고 정해진 길이만큼만
 		for(QuizVO vo : list) {
-			vo.setQuizCtnt(StringUtil.abbr(vo.getQuizCtnt()));
+			vo.setQuizCtnt(StringUtil.abbr(vo.getQuizCtnt(), 20));
 		}
 		return list;
 	}
@@ -42,5 +43,9 @@ public class QuizServiceImpl implements QuizService{
 	@Override
 	public void deleteQuiz(QuizVO quizVO) {
 		mapper.deleteQuiz(quizVO);
+	}
+	
+	public int getCount(QuizVO quizVO) {
+		return mapper.getCount(quizVO);
 	}
 }
