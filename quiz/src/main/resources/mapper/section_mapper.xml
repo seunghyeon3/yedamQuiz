@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.quiz.quiz.mapper.SectionMapper">
+
+<!-- 단건조회  -->
+	<select id="getSection" parameterType="SectionVO" resultType="SectionVO">
+		SELECT  SECTI_NO
+				,QUIZ_NO
+				,SECT_CTNT
+		  FROM  SECTION
+		 WHERE  QUIZ_NO = #{quizNo}
+		   AND  SECT_NO = #{sectNo}
+	</select>
+	
+<!-- 전체조회  -->			  
+	<select id="getSectionList" resultType="SectionVO">
+		SELECT   SECT_NO
+				,QUIZ_NO
+				,SECT_CTNT
+		  FROM SECTION E
+		 WHERE QUIZ_NO = #{quizNo} 
+		 ORDER BY SECT_NO
+	</select>
+
+    <insert id="insertSection" parameterType="SectionVO">
+        INSERT INTO 
+            SECTION (   
+            			 QUIZ_NO
+						,SECT_NO
+						,SECT_CTNT
+                    )
+             VALUES (
+                         #{quizNo},
+                         #{sectNo},
+                         #{sectCtnt}
+                    )
+    </insert>
+
+    <update id="updateSection" parameterType="SectionVO">
+        UPDATE  SECTION  
+           SET 	SECT_CTNT = #{sectCtnt}
+		 WHERE  QUIZ_NO = #{quizNo}
+		   AND  SECT_NO = #{sectNo} 
+    </update>    
+  
+    <delete id="deleteSection" parameterType="SectionVO">
+        DELETE  FROM  SECTION  
+		 WHERE  QUIZ_NO = #{quizNo}
+		   AND  SECT_NO = #{sectNo} 
+    </delete>  
+      
+    <delete id="deleteSectionByQuizNo" parameterType="SectionVO">
+        DELETE  FROM  SECTION  
+		 WHERE  QUIZ_NO = #{quizNo} 
+    </delete>  
+</mapper>
