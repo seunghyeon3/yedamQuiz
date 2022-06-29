@@ -4,6 +4,9 @@
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 
+	<style>
+		.ctnt { cursor : pointer; text-decoration: underline; }
+	</style>
 	<!--  페이지 타이틀 -->
 	<h1 class="mt-4">문제은행  </h1>
 	<div th:text="#{aply.end}"></div> <div th:utext="#{aply.end}"></div>
@@ -103,8 +106,8 @@
 						<td th:text="${quiz.quizNo}">1</td>
 						<td th:text="${quiz.sbjtNm}">중</td>
 						<td th:text="${quiz.typNm}">자바</td>
-						<td th:text="${quiz.quizCtnt}">오버라이딩이란?</td>
-						<td th:text="${quiz.wdt}">2022-01-01</td>
+						<td class="ctnt" th:text="${quiz.quizCtnt}" th:onclick="'window.location.href = \'' + @{/quizUpd?quizNo={quizNo}(quizNo=${quiz.quizNo})} + '\''">오버라이딩이란?</td>
+						<td th:text="${#dates.format(quiz.regDt, 'yyyy-MM-dd')}">2022-01-01</td>
 						<td th:text="${quiz.useYn}">Y</td>
 						<td th:text="${#strings.replace(quiz.questCnt, '/(<([^>]+)>)/ig', '')}">10</td>
 						<td th:text="${quiz.rightRate}">50%</td>
@@ -119,15 +122,15 @@
 	<nav aria-label="...">
 	  <ul class="pagination">
 	    <li class="page-item" th:classappend="${paging.startPage} == 1 ? disabled">
-	        <a class="page-link" th:href="${paging.startPage}">Previous</a></li>
+	        <a class="page-link" th:href="|gopage(${paging.startPage})|">Previous</a></li>
 
 	    <li th:each="num : *{#numbers.sequence(paging.startPage, paging.endPage)}" 
 	        class="page-item" 
 	        th:addclass="${num} == ${paging.page} ? active">
-	        <a class="page-link"  th:text="${num}">2</a></li>
+	        <a class="page-link" th:href="|gopage(${num})|"  th:text="${num}">2</a></li>
 	    
 	    <li class="page-item" th:classappend="${paging.endPage} <= ${paging.lastPage} ? disabled">
-	        <a class="page-link" th:href="${paging.endPage}">Next</a></li>
+	        <a class="page-link" th:href="|gopage(${paging.endPage})|">Next</a></li>
 	  </ul>
 	</nav>
 	<!-- 페이징 종료 -->
