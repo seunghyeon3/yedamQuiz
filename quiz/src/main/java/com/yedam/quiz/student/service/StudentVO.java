@@ -10,5 +10,4 @@ public class StudentVO {
 	private String useYn;
 	private String corsNo;
 	private String ltRoom;
-	
 }

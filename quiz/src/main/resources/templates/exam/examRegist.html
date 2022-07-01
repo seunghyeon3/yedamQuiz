@@ -53,7 +53,9 @@
 			</div>
 			<div class="col-sm-11" id="checkCategory">
 				<!-- DB에 있는 카테고리 호출 예정, 예시로 3개만 코딩 -->
+
 				<input type="checkbox" id="java" name="sbjtCd" value="n"> <label> 자바 </label> &nbsp;&nbsp;
+
 				<input type="checkbox" id="HTML" name="HTML" value="n"> <label> HTML </label> &nbsp;&nbsp;
 				<input type="checkbox" id="CSS" name="CSS" value="n"> <label> CSS </label> &nbsp;&nbsp;
 			</div>
@@ -99,6 +101,7 @@
 						<div class="col-sm-1">
 							<label> 총점 *</label>
 							<input type="text" class="form-control" id="ttScor" name="ttScor" required>
+
 						</div>
 					</div>
 				</div>
@@ -126,6 +129,7 @@
 						<td th:text="${student.stdNo}" name="stdNo"></td>
 						<td th:text="${student.corsNo}" name="corsNo"></td>
 						<td th:text="${student.ltRoom}" name="ltRoom"></td>
+
 					</tr>
 				</tbody>
 
@@ -133,6 +137,7 @@
 		</div>
 		<div class="col-sm-1">
 			<input type="hidden" value='1' name="useYn">
+
 		</div>
 		<div class="d-flex justify-content-center">
 			<input type="submit" class="btn btn-dark" onclick="test" value="등록">

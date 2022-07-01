@@ -1,13 +1,21 @@
 package com.yedam.quiz.quiz.web;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.quiz.comm.Paging;
 import com.yedam.quiz.comm.service.CodeService;
+import com.yedam.quiz.quiz.service.QuizReqVO;
 import com.yedam.quiz.quiz.service.QuizService;
 import com.yedam.quiz.quiz.service.QuizVO;
 /*
@@ -18,18 +26,27 @@ import com.yedam.quiz.quiz.service.QuizVO;
 @Controller
 public class QuizController {
 	
-	@Autowired QuizService quizService;
 	@Autowired CodeService codeService;
+	@Autowired QuizService quizService;
 	
-	//문제 목록
+	//문제 목록	
 	@GetMapping("/quizList")
-	public String quizList(Model model, QuizVO vo) {
+	public String quizList(Model model, QuizVO vo, Paging paging) {
+		
 		//공통코드조회
 		model.addAttribute("codes", codeService.getCodes("SBJT","TYP"));
+		
+		//페이징처리
+		vo.setStart(paging.getFirst());
+		vo.setEnd(paging.getLast()); 
+		paging.setTotalRecord(quizService.getCount(vo));
+		model.addAttribute("paging", paging);
+		
 		//문제목록
 		model.addAttribute("quizList", quizService.getQuizList(vo));
 		return "quiz/list";
 	}
+
 	
 	//문제 등록 페이지
 	@GetMapping("/quizReg")
@@ -52,6 +69,44 @@ public class QuizController {
 			return "redirect:/quizList";
 		}
 	}
+	
+	
+	//문제 수정 페이지
+	@GetMapping("/quizUpd")
+	public String quizUpdForm(Model model, QuizVO vo) {
+		//공통코드조회
+		model.addAttribute("codes", codeService.getCodes("SBJT","TYP"));
+		model.addAttribute("quiz", quizService.getQuiz(vo));
+		return "quiz/upd";
+	}
+	
+	//문제 수정 처리
+	@PostMapping("/quizUpd")
+	public String quizUpdProc(Model model, QuizVO vo) {
+		//문제 수정
+		quizService.updateQuiz(vo);
+		
+		return "redirect:/quizList";
+	}
+	
+	//문제 삭제 처리
+	@GetMapping("/quizDel")
+	public String quizDelProc(Model model, QuizVO vo) {
+		//문제 수정
+		quizService.deleteQuiz(vo);
+		
+		return "redirect:/quizList";
+	}
+	
+	//선택사용/미사용변경
+	@PostMapping("/updateUseYn")  
+	@ResponseBody
+	public Map<String, Integer> updateUseYn(Model model, @RequestBody QuizReqVO vo) {
+		//사용여부변경
+		int result = quizService.updateUseYn(vo);		
+		return Collections.singletonMap("cnt", result);
+	}	
+
 	
 	//문제 복제
 	

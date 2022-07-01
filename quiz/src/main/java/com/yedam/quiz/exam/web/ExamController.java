@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.quiz.exam.service.ExamService;
 import com.yedam.quiz.exam.service.ExamVO;
+import com.yedam.quiz.exam.service.StudentService;
 import com.yedam.quiz.quiz.service.QuizService;
 import com.yedam.quiz.student.service.StudentService;
 import com.yedam.quiz.student.service.StudentVO;
@@ -25,14 +26,22 @@ public class ExamController {
 	private QuizService quizService;
 	
 	@Autowired
+<<<<<<< HEAD
 	private StudentService studentService;
 	
+=======
+	private StudentService stuService;
+>>>>>>> e37f085fcf6358ec84cecdea5bd92b4132d180ad
 	
 	@RequestMapping("examRegistForm")
 	public String examRegistForm(Model model) {
 		model.addAttribute("quizList", quizService.getQuizList(null));
 		//훈련생 리스트
+<<<<<<< HEAD
 		model.addAttribute("studentList", studentService.getStudentList());
+=======
+		model.addAttribute("studentList", stuService.getStudentList());
+>>>>>>> e37f085fcf6358ec84cecdea5bd92b4132d180ad
 		return "exam/examRegist";
 	}
 	
