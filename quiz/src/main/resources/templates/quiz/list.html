@@ -29,6 +29,7 @@
         <!-- <i class="fas fa-table me-1"></i> -->
         <div class="card-header">
 			<form name="frmSearch" id="frmSearch">
+				<input type="hidden" name="page" value="1">
 				<div class="row g-3">
 					<label for="typCd" class="col-sm-2 col-form-label">문제유형</label>
 					<div class="col-sm-3">
@@ -88,9 +89,11 @@
 	
 		<!--  문제 목록 시작 -->
         <div class="card-body">
+        	<form id="frmList" name="frmList">
 			<table class="table">
 				<thead>
 					<tr>
+						<th>선택</th>
 						<th>번호</th>
 						<th>과목</th>
 						<th>문제유형</th>
@@ -103,6 +106,7 @@
 				</thead>
 				<tbody>
 					<tr th:each="quiz : ${quizList}">
+						<td><input type="checkbox" name="quizNo" th:value="${quiz.quizNo}"></td>
 						<td th:text="${quiz.quizNo}">1</td>
 						<td th:text="${quiz.sbjtNm}">중</td>
 						<td th:text="${quiz.typNm}">자바</td>
@@ -114,6 +118,7 @@
 					</tr>
 				</tbody>
 			</table>
+			</form>
 		</div>
      </div>
      <!--  문제 목록 종료 -->
@@ -122,33 +127,38 @@
 	<nav aria-label="...">
 	  <ul class="pagination">
 	    <li class="page-item" th:classappend="${paging.startPage} == 1 ? disabled">
-	        <a class="page-link" th:href="|gopage(${paging.startPage})|">Previous</a></li>
+	        <a class="page-link" th:href="|javascript:gopage(${paging.startPage})|">Previous</a></li>
 
 	    <li th:each="num : *{#numbers.sequence(paging.startPage, paging.endPage)}" 
 	        class="page-item" 
 	        th:addclass="${num} == ${paging.page} ? active">
-	        <a class="page-link" th:href="|gopage(${num})|"  th:text="${num}">2</a></li>
+	        <a class="page-link" th:href="|javascript:gopage(${num})|"  th:text="${num}">2</a></li>
 	    
 	    <li class="page-item" th:classappend="${paging.endPage} <= ${paging.lastPage} ? disabled">
-	        <a class="page-link" th:href="|gopage(${paging.endPage})|">Next</a></li>
+	        <a class="page-link" th:href="|javascript:gopage(${paging.endPage})|">Next</a></li>
 	  </ul>
 	</nav>
 	<!-- 페이징 종료 -->
 	
 	<script>
+	function gopage(p){
+		frmSearch.page.value = p;
+		frmSearch.submit();		
+	}
+	
 	$(function(){
 		
 		searchProc();		//검색
 		initProc();			//초기화
 		optDelProc();  		//선택삭제
-		OptUseProc();  		//선택사용
+		optUseProc();  		//선택사용
 		optNoUseProc();		//선택미사용
 		excelDownProc();	//엑셀다운로드
 		regProc();			//개별등록
 		batchRegProc();		//일괄등록
 		
 		/*--------------
-		검색
+		검색 버튼 핸들러
 		----------------*/
 		function searchProc(){
 			$("#btnSearch").on("click", function(){
@@ -171,7 +181,7 @@
 		}		
 		
 		/*--------------
-		선택삭제
+		선택삭제 버튼 핸들러
 		----------------*/
 		function optDelProc(){
 			$("#btnOptDel").on("click", function(){
@@ -181,25 +191,50 @@
 		
 		
 		/*--------------
-		선택사용
+		선택사용 버튼 핸들러
 		----------------*/
-		function OptUseProc(){
+		function optUseProc(){
 			$("#btnOptUse").on("click", function(){
-				
+				useYnChangeProc('Y');			
 			})
 		}
 
 		/*--------------
-		선택미사용
+		선택미사용 버튼 핸들러
 		----------------*/
 		function optNoUseProc(){
 			$("#btnOptNoUse").on("click", function(){
-				
+				useYnChangeProc('N');
 			})
 		}
 		
 		/*--------------
-		엑셀다운로드
+		선택미사용 서버 처리 ajax 요청
+		----------------*/
+		function useYnChangeProc(useYn){
+			let data = {useYn : useYn, quizNo : [] };
+			//선택된 퀴즈번호를 파라미터로 만듬
+			$("#frmList [name=quizNo]:checked").each(function(i,el){
+				data.quizNo.push(el.value);
+			});
+			
+			if( ! confirm(data.quizNo + " 선택된 문제를 변경할까요?") ) {
+				return;
+			}
+			//사용여부 변경 요청
+			$.ajax({
+				url : "updateUseYn",
+				method : 'post',
+				data : JSON.stringify(data),
+				contentType : "application/json",
+				dataType : 'json'
+			}).done(function(result){
+				alert(result.cnt + '건이 처리되었습니다.');
+				location.reload();
+			});	
+		}
+		/*--------------
+		엑셀다운로드 버튼 핸들러
 		----------------*/		
 		function excelDownProc(){
 			$("#btnExcelDown").on("click", function(){
@@ -209,7 +244,7 @@
 		
 
 		/*--------------
-		개별등록
+		개별등록 버튼 핸들러
 		----------------*/	
 		function regProc(){
 			$("#btnReg").on("click", function(){
@@ -218,7 +253,7 @@
 		}
 		
 		/*--------------
-		일괄등록
+		일괄등록 버튼 핸들러
 		----------------*/	
 		function batchRegProc(){
 			$("#btnBatchReg").on("click", function(){
