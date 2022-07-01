@@ -16,4 +16,6 @@ public class StudentController {
 	public String mypage(Model model) {
 		return "student/mypage";
 	}
+	
+	
 }
