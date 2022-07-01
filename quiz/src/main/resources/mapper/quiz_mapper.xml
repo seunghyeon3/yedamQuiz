@@ -86,6 +86,13 @@
 				,USE_YN    = nvl(#{useYn}, 'N')
 		 WHERE  QUIZ_NO = #{quizNo}
     </update>
+    
+    <update id="updateUseYn" parameterType="QuizReqVO">
+        UPDATE  QUIZ SET    
+				USE_YN    = #{useYn}
+		 WHERE  QUIZ_NO in 
+		 <foreach collection="quizNo" open="(" close=")" separator="," item="no">#{no}</foreach>
+    </update>
         
     <select id="getCount" resultType="int">
     	SELECT COUNT(*) 

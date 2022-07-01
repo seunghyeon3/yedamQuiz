@@ -14,4 +14,5 @@ public interface QuizService {
     public void updateQuiz(QuizVO quizVO);
     public void deleteQuiz(QuizVO quizVO);
     public int getCount(QuizVO quizVO);
+    public int updateUseYn(QuizReqVO vo);
 }

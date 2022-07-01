@@ -60,15 +60,15 @@
 		  <div class="col-sm-10">
 		    <th:block  th:each="code : ${codes.TYP}">
 		    <div class="form-check form-check-inline">  
-			  <input class="form-check-input" name="typCd" type="radio" id="typCd" th:value="${code.cd}" >
+			  <input class="form-check-input" name="typCd" type="radio" id="typCd" th:value="${code.cd}" th:checked="${quiz.typCd == code.cd}">
 			  <label class="form-check-label" for="typCd" th:text="${code.nm}">1</label>
 			</div>
 			</th:block>
 		  </div>
 		</div>
 				
-		<!--  정답    -->		
-		<div class="mb-3 row ansr">
+		<!--  정답    -->	
+		<div class="mb-3 row ansr"  th:style="${quiz.typCd == 'T01' ? 'display:none' : 'display:block'}">
 		  <label for="ansr" class="col-sm-2 col-form-label">정답</label>
 		  <div class="col-sm-10">
 		    <input type="text" class="form-control" id="ansr" name="ansr">
@@ -76,7 +76,7 @@
 		</div>
 			
 		<!--  문제 보기    -->			
-		<div class="mb-3 row sectionList">
+		<div class="mb-3 row sectionList"   th:style="${quiz.typCd == 'T02' ? 'display:none' : 'display:block'}">
 		  <div class="col-12">
 		  	<button type="button" class="btnSectAdd btn btn-outline-success">보기 추가</button>
 		  </div>
