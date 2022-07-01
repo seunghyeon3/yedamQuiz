@@ -42,6 +42,7 @@
 				,ANSR
 				,DESCT
 				,USE_YN
+				,REG_DT
 		  FROM QUIZ E
 		  <include refid="quizCondition"></include>
 		 ORDER BY  QUIZ_NO DESC
@@ -51,6 +52,9 @@
 	</select>
 
     <insert id="insertQuiz" parameterType="QuizVO">
+    <selectKey resultType="string" keyProperty="quizNo" order="BEFORE">
+     	SELECT NVL(MAX(QUIZ_NO),0)+1 FROM QUIZ 
+    </selectKey>
         INSERT INTO QUIZ (  QUIZ_NO
 							,SBJT_CD
 							,QUIZ_CTNT
@@ -58,22 +62,46 @@
 							,ANSR
 							,DESCT
 							,USE_YN
+							,REG_DT
                                 )
                         VALUES(
-                                ( SELECT NVL(MAX(QUIZ_NO),0)+1 FROM QUIZ ),
+                                #{quizNo},
                                 #{sbjtCd},
                                 #{quizCtnt},
                                 #{typCd},
                                 #{ansr},
                                 #{desct},
-                                #{useYn}
+                                nvl(#{useYn}, 'N'),
+                                sysdate
                                 )
     </insert>
+
+    <update id="updateQuiz" parameterType="QuizVO">
+        UPDATE  QUIZ SET                           
+				SBJT_CD    = #{sbjtCd}
+				,QUIZ_CTNT = #{quizCtnt}
+				,TYP_CD    = #{typCd}
+				,ANSR      = #{ansr}
+				,DESCT     = #{desct}
+				,USE_YN    = nvl(#{useYn}, 'N')
+		 WHERE  QUIZ_NO = #{quizNo}
+    </update>
     
+    <update id="updateUseYn" parameterType="QuizReqVO">
+        UPDATE  QUIZ SET    
+				USE_YN    = #{useYn}
+		 WHERE  QUIZ_NO in 
+		 <foreach collection="quizNo" open="(" close=")" separator="," item="no">#{no}</foreach>
+    </update>
+        
     <select id="getCount" resultType="int">
     	SELECT COUNT(*) 
     	  FROM QUIZ
     	<include refid="quizCondition"></include>
     </select>
     
+    <delete id="deleteQuiz">
+    	DELETE QUIZ
+    	 WHERE QUIZ_NO = #{quizNo}
+    </delete>
 </mapper>

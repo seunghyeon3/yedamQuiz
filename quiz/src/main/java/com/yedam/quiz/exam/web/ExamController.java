@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.yedam.quiz.exam.service.ExamService;
 import com.yedam.quiz.exam.service.ExamVO;
 import com.yedam.quiz.quiz.service.QuizService;
+import com.yedam.quiz.student.service.StudentService;
 
 @Controller
 public class ExamController {
@@ -20,14 +21,14 @@ public class ExamController {
 	@Autowired
 	private QuizService quizService;
 	
-	//훈련생 리스트 받아오는 부분 추가 해줘야함.
-	
+	@Autowired
+	private StudentService studentService;
 	
 	@RequestMapping("examRegistForm")
 	public String examRegistForm(Model model) {
 		model.addAttribute("quizList", quizService.getQuizList(null));
 		//훈련생 리스트
-		model.addAttribute("studnetList", null);
+		model.addAttribute("studentList", studentService.getStudentList());
 		return "exam/examRegist";
 	}
 	
@@ -38,7 +39,8 @@ public class ExamController {
 	}
 	
 	@RequestMapping("examList")
-	public String examList() {
+	public String examList(Model model) {
+		model.addAttribute("examList", examService.getExamList());
 		return "exam/examList";
 	}
 	
