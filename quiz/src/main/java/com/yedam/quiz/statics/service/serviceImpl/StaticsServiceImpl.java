@@ -1,5 +1,21 @@
 package com.yedam.quiz.statics.service.serviceImpl;
 
-public class StaticsServiceImpl {
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.yedam.quiz.statics.mapper.StaticsMapper;
+import com.yedam.quiz.statics.service.StaticsService;
+import com.yedam.quiz.statics.service.StaticsVO;
+
+public class StaticsServiceImpl implements StaticsService {
+
+	@Autowired
+	StaticsMapper mapper;
+
+	@Override
+	public List<StaticsVO> getStaticsByQuiz(StaticsVO staticsVO) {
+		return null;
+	}
 
 }
