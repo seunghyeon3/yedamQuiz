@@ -7,7 +7,7 @@
 
 	<h1 class="mt-4">시험지 등록</h1>
 
-	<form action="examRegist" method="post" onsubmit="checkDate()">
+	<form method="post" action="examRegist">
 		<!-- <div class="form-gruop"> -->
 		<label> 시험명 *</label>
 		<input type="text" class="form-control" placeholder="자바 개념 시험지" id="examNm" name="examNm" required> <br>
@@ -121,26 +121,28 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="student : ${studentList}" th:value="${student.ltRoom}" style="display: none;">
+					<tr th:each="student : ${studentList}" th:value="${student.ltRoom}" style="display: none;" id="std"
+						name="std">
 						<td>
-							<input type="checkbox" value="N" name="list">
+							<input type="checkbox">
 						</td>
 						<td th:text="${student.stdNm}" name="stdNm"></td>
 						<td th:text="${student.stdNo}" name="stdNo"></td>
 						<td th:text="${student.corsNo}" name="corsNo"></td>
 						<td th:text="${student.ltRoom}" name="ltRoom"></td>
-
 					</tr>
 				</tbody>
 
 			</table>
 		</div>
-		<div class="col-sm-1">
-			<input type="hidden" value='1' name="useYn">
-
+		<label for="useYn" class="col-sm-2 col-form-label">사용여부</label>
+		<div class="col-sm-10">
+			<div class="form-check form-switch">
+				<input class="form-check-input" type="checkbox" role="switch" name="useYn" value="Y" checked>
+			</div>
 		</div>
 		<div class="d-flex justify-content-center">
-			<input type="submit" class="btn btn-dark" onclick="test" value="등록">
+			<input type="submit" class="btn btn-dark" value="등록" id="saveExam">
 		</div>
 	</form>
 
@@ -213,7 +215,6 @@
 		}
 		function choiceLt(ev) {
 			// value 로딩 완료
-			console.log(ev.value);
 
 			let stdTable = document.querySelectorAll("#stdTable > tbody > tr[value='" + ev.value + "']");
 			let notStdTable = document.querySelectorAll("#stdTable > tbody > :not(tr[value='" + ev.value + "'])");
@@ -232,5 +233,18 @@
 			}
 
 		}
+
+
+	/*	document.getElementById("saveExam").onsubmit('click', function () {
+			let index = 1;
+			document.querySelectorAll('#std').forEach(function (item, idx) {
+				if (item.children[0].value = "Y") {
+					item.setAttribute('name', "student[" + index + "].stdNo");
+					index++;
+				}
+			})
+		})
+
+*/
 	</script>
 </th:block>

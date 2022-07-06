@@ -1,8 +1,9 @@
 package com.yedam.quiz.exam.service;
 
 import java.sql.Date;
+import java.util.List;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.yedam.quiz.student.service.StudentVO;
 
 import lombok.Data;
 
@@ -22,5 +23,7 @@ public class ExamVO {
 	private String corsNo;		//과정번호
 	private int orgNo;			//원본시험지번호
 	private int ttScor;			//총점
+	
+	private List<StudentVO> students;
 	
 }

@@ -17,8 +17,7 @@ public class ExamServiceImpl implements ExamService{
 	
 	@Override
 	public ExamVO getExam(ExamVO vo) {
-		// TODO Auto-generated method stub
-		return null;
+		return map.getExam(vo);
 	}
 
 	@Override

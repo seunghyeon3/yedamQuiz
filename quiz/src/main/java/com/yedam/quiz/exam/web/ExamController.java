@@ -35,7 +35,7 @@ public class ExamController {
 	@RequestMapping("examRegist")
 	public String examRegist(ExamVO vo) {
 		examService.insertExam(vo);
-		return "exam/examList";
+		return "redirect:/examList";
 	}
 	
 	@RequestMapping("examList")
@@ -47,5 +47,12 @@ public class ExamController {
 	@RequestMapping("getExamList")
 	public List<ExamVO> getExamList() {
 		return examService.getExamList();
+	}
+	
+	@RequestMapping("examView")
+	public String examView(Model model, ExamVO vo) {
+		System.out.println(examService.getExam(vo));
+		model.addAttribute("examList", examService.getExam(vo));
+		return "exam/examMod";
 	}
 }
