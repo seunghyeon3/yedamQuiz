@@ -15,13 +15,15 @@ import com.yedam.quiz.statics.service.StaticsVO;
 
 @Controller
 public class StaticsController {
+
 	@Autowired
 	StaticsService service;
 
 	// 문제별 통계정보.
 	@GetMapping("/staticsByQuiz")
 	public String staticsByQuiz(Model model, StaticsVO vo) {
-
+		System.out.println("staticsByQuiz call()");
+		model.addAttribute("list", service.getStaticsByQuiz(vo));
 		return "statics/listByQuiz";
 	}
 }
