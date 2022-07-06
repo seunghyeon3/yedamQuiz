@@ -15,7 +15,8 @@
 	<div th:utext="#{aply.end}"></div>
 	<!-- breadcrump / 도움말 -->
 	<ol class="breadcrumb mb-4">
-		<li><a class="float-right" data-bs-toggle="collapse" href="#collapseHelp" role="button" aria-expanded="false" aria-controls="collapseHelp">
+		<li>
+			<a class="float-right" data-bs-toggle="collapse" href="#collapseHelp" role="button" aria-expanded="false" aria-controls="collapseHelp">
 				<img src="assets/img/free-icon-help-6269920.png" width="20px">
 			</a>
 		</li>
@@ -113,15 +114,14 @@
 							<td th:text="${quiz.sbjtNm}">중</td>
 							<td th:text="${quiz.typNm}">자바</td>
 							<td class="ctnt" th:text="${quiz.quizCtnt}"
-								th:onclick="'window.location.href = \'' + @{/quizUpd?quizNo={quizNo}(quizNo=${quiz.quizNo})} + '\''">
-								오버라이딩이란?</td>
+								th:onclick="'window.location.href = \'' + @{/quizUpd?quizNo={quizNo}(quizNo=${quiz.quizNo})} + '\''">오버라이딩이란?</td>
 							<td th:text="${#dates.format(quiz.regDt, 'yyyy-MM-dd')}">2022-01-01</td>
-						<td th:text="${quiz.useYn}">Y</td>
-						<td th:text="${#strings.replace(quiz.questCnt, '/(<([^>]+)>)/ig', '')}">10</td>
-						<td th:text="${quiz.rightRate}">50%</td>
-					</tr>
-				</tbody>
-			</table>
+							<td th:text="${quiz.useYn}">Y</td>
+							<td th:text="${#strings.replace(quiz.questCnt, '/(<([^>]+)>)/ig', '')}">10</td>
+							<td th:text="${quiz.rightRate}">50%</td>
+					    </tr>
+				    </tbody>
+			    </table>
 			</form>
 		</div>
      </div>
@@ -134,9 +134,7 @@
 	        <a class="page-link" th:href="|javascript:gopage(${paging.startPage})|">Previous</a>
 		</li>
 
-	    <li th:each="num : *{#numbers.sequence(paging.startPage, paging.endPage)}" 
-	        class="page-item" 
-	        th:addclass="${num} == ${paging.page} ? active">
+	    <li th:each="num : *{#numbers.sequence(paging.startPage, paging.endPage)}" class="page-item" th:addclass="${num} == ${paging.page} ? active">
 	        <a class="page-link" th:href="|javascript:gopage(${num})|"  th:text="${num}">2</a>
 		</li>
 	    
