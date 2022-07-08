@@ -65,4 +65,10 @@
     <delete id="deleteExam" parameterType="ExamVO">
     DELETE FROM EXAM WHERE EXAM_NO = #{examNo}
     </delete>
+    
+    <!-- row갯수확인  -->
+	<select id="getCount" parameterType="ExamVO" resultType="int">
+		SELECT  COUNT(*)
+		FROM EXAM
+	</select>
 </mapper>

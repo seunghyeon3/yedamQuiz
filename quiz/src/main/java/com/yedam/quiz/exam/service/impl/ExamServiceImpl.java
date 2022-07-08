@@ -27,20 +27,22 @@ public class ExamServiceImpl implements ExamService{
 
 	@Override
 	public void insertExam(ExamVO vo) {
-		System.out.println(vo);
 		map.insertExam(vo);
 	}
 
 	@Override
 	public void updateExam(ExamVO vo) {
-		// TODO Auto-generated method stub
-		
+		map.updateExam(vo);
 	}
 
 	@Override
 	public void deleteExam(ExamVO vo) {
-		// TODO Auto-generated method stub
-		
+		map.deleteExam(vo);
+	}
+
+	@Override
+	public int getCount() {
+		return map.getCount();
 	}
 
 }

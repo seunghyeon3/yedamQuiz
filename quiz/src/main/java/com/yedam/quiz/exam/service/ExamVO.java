@@ -3,12 +3,13 @@ package com.yedam.quiz.exam.service;
 import java.sql.Date;
 import java.util.List;
 
+import com.yedam.quiz.comm.service.SearchVO;
 import com.yedam.quiz.student.service.StudentVO;
 
 import lombok.Data;
 
 @Data
-public class ExamVO {
+public class ExamVO extends SearchVO{
 
 	private int examNo;			//시험번호
 	private String examNm;		//시험명

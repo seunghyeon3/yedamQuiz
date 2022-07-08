@@ -11,4 +11,5 @@ public interface ExamService {
 	public void insertExam(ExamVO vo);
 	public void updateExam(ExamVO vo);
 	public void deleteExam(ExamVO vo);
+	public int getCount();
 }
