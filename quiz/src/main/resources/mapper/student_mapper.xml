@@ -3,15 +3,27 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yedam.quiz.student.mapper.StudentMapper">
-
+	<!-- 전체조회 -->
 	<select id="getStudentList" parameterType="StudentVO"
 		resultType="StudentVO">
 
 		SELECT S.STD_NO, S.STD_NM, S.CORS_NO, C.LT_ROOM
-		FROM STD S, CORS C
+		FROM STD S,
+		CORS C
 		WHERE S.CORS_NO = C.CORS_NO AND C.USE_YN = 1
 		ORDER BY 4
 
+	</select>
+	<!-- 단건조회 -->
+	<select id="getStudent" parameterType="StudentVO"
+		resultType="StudentVO">
+		
+		SELECT s.std_no, s.std_nm, c.cors_no, c.cors_nm, c.lt_room
+		FROM std s JOIN cors c
+			 ON (s.cors_no = c.cors_no)
+		WHERE s.std_no = #{stdNo}
+		  AND s.std_nm = #{stdNm}
+		  AND s.use_yn = 1
 	</select>
 
 </mapper>

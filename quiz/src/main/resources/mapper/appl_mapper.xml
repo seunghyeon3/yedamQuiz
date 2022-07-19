@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.quiz.student.mapper.ApplMapper">
+	<!-- 전체조회 -->
+	<select id="getApplList" parameterType="ApplVO" resultType="ApplVO">
+		SELECT e.exam_no, e.exam_nm, e.start_dttm, e.end_dttm, a.std_no, a.appl_dttm, a.tt_scor
+		FROM appl a JOIN exam e
+    		ON ( a.exam_no = e.exam_no )
+		WHERE a.std_no = #{stdNo}
+	</select>
+</mapper>

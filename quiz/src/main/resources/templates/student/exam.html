@@ -38,22 +38,6 @@
 		</div>
 	</div>
 	<script>
-		function getExamInfo(applInfo){
-			let formData = new FormData();
-			formData.append("stdNo", applInfo.stdNo);
-			formData.append("examNo", applInfo.examNo);
-			
-			let url = null;
-			if(applInfo.appl_dttm == null){
-				url = "studentResult";
-			}else{
-				url = "studentExam";
-			}
-			
-			const request = new XMLHttpRequest();
-			request.open("POST", url);
-			request.send(formData);
-		}
 	</script>
 </body>
 </html>
