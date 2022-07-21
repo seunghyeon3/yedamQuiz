@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.quiz.appl.mapper.ApplMapper">
+	<insert id="insertAppl">
+		INSERT INTO APPL (
+		EXAM_NO,
+		STD_NO
+		)
+		VALUES (
+		#{examNo},
+		#{stdNo}
+		)
+	</insert>
+
+	<insert id="firstInsertAppl">
+		<selectKey resultType="int" keyProperty="examNo"	order="BEFORE">
+			SELECT NVL(MAX(EXAM_NO),1) FROM EXAM
+		</selectKey>
+
+		INSERT INTO APPL (
+		EXAM_NO,
+		STD_NO
+		)
+		VALUES (
+		#{examNo},
+		#{stdNo}
+		)
+
+	</insert>
+</mapper>
