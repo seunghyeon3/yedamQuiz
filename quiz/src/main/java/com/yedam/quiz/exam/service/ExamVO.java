@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.yedam.quiz.comm.service.SearchVO;
+import com.yedam.quiz.question.service.QuestionVO;
 import com.yedam.quiz.student.service.StudentVO;
 
 import lombok.Data;
@@ -25,6 +26,8 @@ public class ExamVO extends SearchVO{
 	private int orgNo;			//원본시험지번호
 	private int ttScor;			//총점
 	
-	private List<StudentVO> students;
+	private List<StudentVO> std;
+	private List<QuestionVO> qstn;
+	
 	
 }
