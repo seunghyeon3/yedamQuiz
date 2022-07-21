@@ -7,7 +7,7 @@
 
 	<h1 class="mt-4">시험지 등록</h1>
 
-	<form method="post" action="examRegist" id="saveExam" onsubmit="saveEaxm()">
+	<form method="post" id="saveExam">
 		<!-- <div class="form-gruop"> -->
 		<label> 시험명 *</label>
 		<input type="text" class="form-control" placeholder="자바 개념 시험지" id="examNm" name="examNm" required> <br>
@@ -17,7 +17,6 @@
 		<br>
 		<div class="row">
 			<div class="col-sm-3">
-				<input type="hidden" value="f" id="corsNo" name="corsNo">
 				<select class="form-select" id="inputGroupSelect04" aria-label="Default select example" name="ltRoom"
 					onchange="choiceLt(this)">spring checkbox 여러개 선택 넘기기
 					<option selected>강의실 선택</option>
@@ -29,6 +28,7 @@
 				</select>
 			</div>
 		</div>
+		<input type="hidden" id="corsNo" name="corsNo">
 		<br>
 		<div class="row">
 			<div class="col-sm-2">
@@ -53,22 +53,21 @@
 			</div>
 			<div class="col-sm-11" id="checkCategory">
 				<!-- DB에 있는 카테고리 호출 예정, 예시로 3개만 코딩 -->
-
-				<input type="checkbox" id="java" name="sbjtCd" value="n"> <label> 자바 </label> &nbsp;&nbsp;
-
-				<input type="checkbox" id="HTML" name="HTML" value="n"> <label> HTML </label> &nbsp;&nbsp;
-				<input type="checkbox" id="CSS" name="CSS" value="n"> <label> CSS </label> &nbsp;&nbsp;
+				<th:block th:each="sbjt : ${sbjtList}">
+					<input type="checkbox" id="sbjtCd" name="sbjtCd"> <label th:text="${sbjt.nm}"></label> &nbsp;&nbsp;
+				</th:block>
 			</div>
 			<br><br>
 			<div class="col-sm-1">
 				<label> 수동/자동 *</label>
 			</div>
-			<div class="col-sm-11">
+			<div class="col-sm-11" id="checkQuiz">
 				<!-- 수동 / 자동값에 따라서 문제 내용이 달라져야함. -->
 				<!-- 수동 / 자동 클릭 후 카테고리 변경이 일어 난다면, 바뀌어야 함. 클릭이벤트 넣어줘야 함 -->
-				<input type="checkbox" id="manual" name="manual" onclick="examList('manual')" value="n"> <label> 수동
+				<input type="checkbox" id="showList" name="showList" onclick="examList('manual')"> <label> 수동
 				</label> &nbsp;&nbsp;
-				<input type="checkbox" id="auto" name="auto" onclick="examList(auto)" value="n"> <label> 자동 </label>
+				<input type="checkbox" id="showList" name="showList" onclick="examList('auto')"> <label> 자동
+				</label>
 				&nbsp;&nbsp;
 			</div>
 			<br><br>
@@ -76,25 +75,28 @@
 				<div class="col-sm-12">
 					<div style="display: none;" id="manualExam">
 						<label>문제 리스트 *</label>
-						<table class="table table-hover" id="quiz">
+						<table class="table table-hover">
 							<thead>
 								<tr>
 									<th>선택</th>
+									<th>순서</th>
 									<th>문제유형</th>
 									<th>과목</th>
 									<th>제목?</th>
-									<th>사용여부</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="quiz : ${quizList}">
-									<td>
-										<input type="checkbox" value="N">
-									</td>
-									<td th:text="${quiz.typCd}"></td>
-									<td th:text="${quiz.sbjtNm}"></td>
-									<td>추가 되어야 하는 부분</td>
-									<td th:text="${quiz.useYn}"></td>
+								<tr th:each="quiz, i : ${quizList}" id="quizList" style="display: none">
+									<th:block th:if="${quiz.useYn.equals('Y')}">
+										<td>
+											<input type="checkbox" name="quizChecked">
+											<input type="hidden" th:value="${quiz.quizNo}">
+										</td>
+										<td th:text="${i.count}"></td>
+										<td th:text="${quiz.typCd}"></td>
+										<td th:text="${quiz.sbjtNm}"></td>
+										<td th:text="${quiz.quizCtnt}" id="quziCtnt"></td>
+									</th:block>
 								</tr>
 							</tbody>
 						</table>
@@ -114,22 +116,22 @@
 				<thead>
 					<tr>
 						<th>선택</th>
-						<th>이름</th>
 						<th>훈련생번호</th>
+						<th>이름</th>
 						<th>과정번호</th>
 						<th>강의실</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="student : ${studentList}" th:value="${student.ltRoom}" style="display: none;" id="std"
-						name="std">
+					<tr th:each="student : ${studentList}" th:value="${student.ltRoom}" style="display: none;" id="std">
 						<td>
-							<input type="checkbox">
+							<input type="checkbox" name="stdChecked">
+							<input type="hidden" th:value="${student.stdNo}">
 						</td>
-						<td th:text="${student.stdNm}" name="stdNm"></td>
-						<td th:text="${student.stdNo}" name="stdNo"></td>
-						<td th:text="${student.corsNo}" name="corsNo"></td>
-						<td th:text="${student.ltRoom}" name="ltRoom"></td>
+						<td th:text="${student.stdNo}"></td>
+						<td th:text="${student.stdNm}"></td>
+						<td th:text="${student.corsNo}" id=corsNoCheck></td>
+						<td th:text="${student.ltRoom}"></td>
 					</tr>
 				</tbody>
 
@@ -141,8 +143,9 @@
 				<input class="form-check-input" type="checkbox" role="switch" name="useYn" value="Y" checked>
 			</div>
 		</div>
+		<input type="hidden" name="arrayParam" id="arrayParam">
 		<div class="d-flex justify-content-center">
-			<input type="submit" class="btn btn-dark" value="등록">
+			<input type="button" class="btn btn-dark" value="등록" onclick="saveExam()">
 		</div>
 	</form>
 
@@ -168,58 +171,76 @@
 		window.onload = function () {
 
 			let checkCategory = document.getElementById("checkCategory");
+			let checkCategoryList = document.querySelectorAll("#sbjtCd")
 			checkCategory.addEventListener("click", function (ev) {
-				console.log(ev.target.value);
-				if (ev.target.value == 'y')
-					ev.target.value = 'n';
-				else
-					ev.target.value = 'y';
-
+				let count = 0;
+				for (list of checkCategoryList) {
+					if (list.checked) {
+						count++;
+					}
+				}
+				if (count > 1) {
+					window.alert("하나만 선택하세요");
+					ev.target.checked = false;
+				}
 			})
 
-			let checkList = document.querySelectorAll("#quiz > tbody > tr > td :nth-child(1)");
+			/*let checkList = document.querySelectorAll("#quiz > tbody > tr > td :nth-child(1)");
 			for (list of checkList) {
-				if (String(list.value).toLowerCase() == 'n') {
-				}
 
-			}
+			}*/
+
 		}
 		function examList(type) {
+			let checkCategory = document.querySelectorAll("#sbjtCd:checked");
+			let checkShowList = document.querySelectorAll('#showList:checked');
+			let exam = document.getElementById('manualExam');
+			let quizList = document.querySelectorAll("#quizList");
+
 			let temp = 0;
-			let checkCategory = document.querySelectorAll("#checkCategory > input");
-			for (list of checkCategory) {
-				if (list.value == 'y') {
-					temp++;
+
+			if (checkShowList.length <= 1) {
+
+				if (exam.style.display == 'block') {
+					for (quiz of quizList) {
+						if (quiz.style.display == "") {
+							quiz.style.display = "none";
+						}
+					}
 				}
-			}
-			//카테고리 골라서 view 해주는거 해줘야함.
-			if (temp > 0) {
-				let exam = document.getElementById('manualExam');
-				if (event.target.value == 'n') {
+				//카테고리 골라서 view 해주는거 해줘야함.
+				if (checkCategory.length == 1) {
 					if (type == 'manual') {
 						exam.style.display = "block";
-						event.target.value = 'y';
+						for (quiz of quizList) {
+							//데이터 존재 하지 않는 것 제거하려고 추가
+							if (quiz.children.length > 0) {
+								if (quiz.children[3].textContent == checkCategory[0].nextElementSibling.textContent) {
+									quiz.style.display = "";
+									quiz.children[1].textContent = ++temp;
+								}
+							}
+						}
 					}
 					else {
-						//자동일때
+						// 자동 문제 등록
 					}
 				} else {
-					exam.style.display = "none";
-					event.target.value = 'n'
+					event.target.checked = false;
+					window.alert("카테고리 선택!!!");
 				}
-			}
-			else {
+			} else {
 				event.target.checked = false;
-				window.alert("카테고리 선택!!!");
+				window.alert("하나만 선택하세요")
 			}
+
 		}
 		function choiceLt(ev) {
 			// value 로딩 완료
-
 			let stdTable = document.querySelectorAll("#stdTable > tbody > tr[value='" + ev.value + "']");
 			let notStdTable = document.querySelectorAll("#stdTable > tbody > :not(tr[value='" + ev.value + "'])");
-			let corsNo = document.getElementById('corsNo');
-			corsNo.value = stdTable[0].childNodes[5].textContent;
+			//let corsNo = document.getElementById('corsNo');
+			//corsNo.value = stdTable[0].childNodes[5].textContent;
 
 			for (let list of notStdTable) {
 				list.style.display = "none";
@@ -233,18 +254,26 @@
 			}
 
 		}
-		
-		function saveExam(){
-			let index = 1;
-			document.querySelectorAll('#std').forEach(function (item, idx) {
-				if (item.children[0].value = "Y") {
-					item.setAttribute('name', "student[" + index + "].stdNo");
-					index++;
-				}else{
-					item.remove();
-				}
+
+		function saveExam() {
+
+			//subject code 추가
+			//corsNo 추가
+			$('input:checkbox[name=stdChecked]:checked').each(function (idx, item) {
+				$(this).next().attr("name", `std[${idx}].stdNo`);
+
 			})
-			return true;
+			
+			$('input:checkbox[name=quizChecked]:checked').each(function (idx, item) {
+				$(this).next().attr("name", `qstn[${idx}].quizNo`);
+			})
+			
+			let checkCategory = document.querySelectorAll("#sbjtCd:checked");
+			document.getElementById('sbjtCd').value =checkCategory[0].nextElementSibling.textContent 
+
+			$('#saveExam').attr("action", "examRegist");
+
+			$('#saveExam').submit();
 		}
 
 
