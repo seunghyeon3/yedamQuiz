@@ -3,6 +3,21 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yedam.quiz.exam.mapper.QuestionMapper">
+
+	<insert id="insertQuestion">
+		<selectKey keyProperty="examNo" resultType="int" order="BEFORE">
+			SELECT
+			NVL(MAX(EXAM_NO),1) FROM EXAM
+		</selectKey>
+		
+		INSERT INTO Question VALUES (
+		#{examNo},
+		#{quizNo},
+		#{qestnOrd},
+		#{qestnScor}
+		)
+	</insert>
+  
 	<!-- 전체조회 -->
 	<select id="getQuestionList" parameterType="QuestionVO" resultType="QuestionVO">
 		SELECT qe.exam_no, qe.quiz_no, qz.quiz_ctnt, qz.typ_cd, qz.ansr 
@@ -22,3 +37,4 @@
 	  ORDER BY qe.exam_no, qe.quiz_no
 	</select>
 </mapper>
+

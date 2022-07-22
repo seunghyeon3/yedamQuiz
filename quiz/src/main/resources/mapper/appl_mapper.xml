@@ -3,6 +3,32 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yedam.quiz.student.mapper.ApplMapper">
+	<insert id="insertAppl">
+		INSERT INTO APPL (
+		EXAM_NO,
+		STD_NO
+		)
+		VALUES (
+		#{examNo},
+		#{stdNo}
+		)
+	</insert>
+
+	<insert id="firstInsertAppl">
+		<selectKey resultType="int" keyProperty="examNo"	order="BEFORE">
+			SELECT NVL(MAX(EXAM_NO),1) FROM EXAM
+		</selectKey>
+
+		INSERT INTO APPL (
+		EXAM_NO,
+		STD_NO
+		)
+		VALUES (
+		#{examNo},
+		#{stdNo}
+		)
+
+	</insert>
 	<!-- 전체조회 -->
 	<select id="getApplList" parameterType="ApplVO" resultType="ApplVO">
 		SELECT e.exam_no, e.exam_nm, e.start_dttm, e.end_dttm, a.std_no, a.appl_dttm, a.tt_scor
