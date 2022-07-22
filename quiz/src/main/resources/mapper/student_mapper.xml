@@ -22,7 +22,9 @@
 		FROM std s JOIN cors c
 			 ON (s.cors_no = c.cors_no)
 		WHERE s.std_no = #{stdNo}
+		  <if test="stdNm != null">
 		  AND s.std_nm = #{stdNm}
+		  </if>
 		  AND s.use_yn = 1
 	</select>
 

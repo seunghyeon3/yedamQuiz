@@ -14,6 +14,7 @@ public class ApplServiceImpl implements ApplService {
 
 	@Autowired
 	ApplMapper map;
+	
 	@Override
 	public List<ApplVO> getApplList(ApplVO applVO) {
 		// TODO Auto-generated method stub
@@ -42,6 +43,11 @@ public class ApplServiceImpl implements ApplService {
 	public void deleteAppl(ApplVO applVO) {
 		// TODO Auto-generated method stub
 		map.deleteAppl(applVO);
+	}
+
+	@Override
+	public void getExamResult(ApplVO applVO) {
+		map.getExamResult(applVO);		
 	}
 
 }

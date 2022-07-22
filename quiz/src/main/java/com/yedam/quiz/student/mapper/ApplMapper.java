@@ -14,4 +14,5 @@ public interface ApplMapper {
 	public void updateAppl(ApplVO applVO);
 	public void deleteAppl(ApplVO applVO);
 
+	public void getExamResult(ApplVO applVO);
 }

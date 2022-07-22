@@ -11,4 +11,6 @@ public interface ApplService {
 	public void insertAppl(ApplVO applVO);
 	public void updateAppl(ApplVO applVO);
 	public void deleteAppl(ApplVO applVO);
+	
+	public void getExamResult(ApplVO applVO);
 }

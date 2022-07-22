@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.quiz.student.mapper.ApplAnsrMapper">
+	<!-- 전체조회 -->
+	<select id="getApplAnsrList" parameterType="ApplAnsrVO" resultType="ApplAnsrVO">
+		SELECT *
+		FROM appl_ansr
+	</select>
+	
+	<!-- 단건조회 -->
+	<select id="getApplAnsr" parameterType="ApplAnsrVO" resultType="ApplAnsrVO">
+		SELECT *
+		FROM appl_ansr
+		WHERE quiz_no = #{quizNo}
+		  AND exam_no = #{exzmNo}
+		  AND std_no = #{stdNo}
+	</select>
+	
+	<!-- 등록 -->
+	<insert id="insertApplAnsr" parameterType="ApplAnsrVO">
+		INSERT INTO appl_ansr (
+						quiz_no, 
+						exam_no, 
+						std_no, 
+						ord, 
+						ansr, 
+						scor, 
+						ansr_yn)
+				VALUES(
+						#{quizNo},
+						#{examNo},
+						#{stdNo},
+						#{ord},
+						#{ansr},
+						#{scor},
+						#{ansrYn})
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="updateApplAnsr" parameterType="ApplAnsrVO">
+		UPDATE appl_ansr
+		<set>
+			<if test="ord != null">ord = #{ord},</if>
+			<if test="ansr != null">ansr = #{ansr},</if>
+			<if test="scor != null">scor = #{scor},</if>
+			<if test="ansrYn != null">ansr_yn = #{ansrYn},</if>
+		</set>
+		WHERE quiz_no = #{quizNo}
+		  AND exam_no = #{exzmNo}
+		  AND std_no = #{stdNo}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="deleteApplAnsr" parameterType="ApplAnsrVO">
+		DELETE FROM appl_ansr
+		WHERE quiz_no = #{quizNo}
+		  AND exam_no = #{exzmNo}
+		  AND std_no = #{stdNo}
+	</delete>
+</mapper>

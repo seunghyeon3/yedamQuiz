@@ -8,9 +8,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.yedam.quiz.exam.service.ExamService;
 import com.yedam.quiz.exam.service.ExamVO;
+import com.yedam.quiz.exam.service.QuestionService;
+import com.yedam.quiz.exam.service.QuestionVO;
+import com.yedam.quiz.quiz.service.SectionService;
+import com.yedam.quiz.student.service.ApplAnsrService;
+import com.yedam.quiz.student.service.ApplAnsrVO;
 import com.yedam.quiz.student.service.ApplService;
 import com.yedam.quiz.student.service.ApplVO;
 import com.yedam.quiz.student.service.StudentService;
@@ -26,8 +32,16 @@ public class StudentController {
 	
 	@Autowired
 	private ExamService examService;	
+	
+	@Autowired
+	private QuestionService questionService;
+	
+	@Autowired
+	private SectionService sectionService;
 
-
+	@Autowired
+	private ApplAnsrService applAnsrService;
+	
 	@GetMapping("login")
 	public String loginForm(Model model) {
 		return "student/login";
@@ -75,12 +89,22 @@ public class StudentController {
 		model.addAttribute("examInfo", examVO);
 		
 		//문제 정보
-		
+		QuestionVO questionVO = new QuestionVO();
+		questionVO.setExamNo(examNo);
+		List<QuestionVO> qList = questionService.getQuestionList(questionVO);
+		model.addAttribute("quizList", qList);
 		
 		//보기 정보
-		
+		model.addAttribute("sectionInfo", sectionService.getSectionPerQuiz(qList));
 		
 		return "student/exam";
+	}
+	
+	@PostMapping("gradeExam")
+	public String gradeExam(ApplAnsrVO vo, Model model, RedirectAttributes reAttr) {
+		//응시자답안 등록
+		applAnsrService.insertApplAnsrList(vo.getAnsrlist());
+		return "redirect:/studentResult";
 	}
 	
 	@PostMapping("studentResult")
@@ -98,8 +122,13 @@ public class StudentController {
 		model.addAttribute("examInfo", examVO);
 		
 		//문제 정보
+		QuestionVO questionVO = new QuestionVO();
+		questionVO.setExamNo(examNo);
+		List<QuestionVO> qList = questionService.getQuestionList(questionVO);
+		model.addAttribute("quizList", qList);
 		
 		//보기 정보
+		model.addAttribute("sectionInfo", sectionService.getSectionPerQuiz(qList));
 		
 		//응시자답안 정보		
 		

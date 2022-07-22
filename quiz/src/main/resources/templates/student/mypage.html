@@ -25,34 +25,47 @@
 					</div>
 					<div
 						class="card-body row justify-content-center align-items-center g-2 mb-2"
-						th:each="appl : ${ applList }" th:onclick="'getApplInfo('+ ${appl} +');'">
+						th:each="appl : ${ applList }"
+						th:onclick="getApplInfo( [[ ${appl} ]])">
 						<div class="col-6">
-							<div class="p-3 border bg-light text-center" th:text="${ appl.examNm }"></div>
+							<div class="p-3 border bg-light text-center"
+								th:text="${ appl.examNm }"></div>
 						</div>
 						<div class="col-6">
-							<div class="p-3 border bg-light text-center" th:text="${ appl.startDttm } + ' ~ ' + ${ appl.endDttm }"></div>
+							<div class="p-3 border bg-light text-center"
+								th:text="${ appl.startDttm } + ' ~ ' + ${ appl.endDttm }"></div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div id="layoutAuthentication_footer">
+		<footer class="py-4 bg-light mt-auto">
+			<div class="container-fluid px-4">
+				<div class="d-flex align-items-center justify-content-between small">
+					<div class="text-muted">Copyright &copy; 예담직업전문학교 2022</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+	<form id="info">
+		<input type="hidden" id="stdNo" name="stdNo"> <input
+			type="hidden" id="examNo" name="examNo">
+	</form>
 	<script>
-		function getExamInfo(applInfo){
-			let formData = new FormData();
-			formData.append("stdNo", applInfo.stdNo);
-			formData.append("examNo", applInfo.examNo);
-			
-			let url = null;
-			if(applInfo.appl_dttm == null){
-				url = "studentResult";
-			}else{
-				url = "studentExam";
+		function getApplInfo(applInfo) {
+			let form = document.getElementById('info');
+			form.stdNo.value = applInfo.stdNo;
+			form.examNo.value = applInfo.examNo;
+
+			form.method = 'POST';
+			if (applInfo.applDttm == null) {
+				form.action = "studentExam";
+			} else {
+				form.action = "studentResult";
 			}
-			
-			const request = new XMLHttpRequest();
-			request.open("POST", url);
-			request.send(formData);
+			form.submit();
 		}
 	</script>
 </body>
