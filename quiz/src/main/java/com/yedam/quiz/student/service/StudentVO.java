@@ -9,5 +9,6 @@ public class StudentVO {
 	private String stdNm;
 	private String useYn;
 	private String corsNo;
+	private String corsNm;
 	private String ltRoom;
 }

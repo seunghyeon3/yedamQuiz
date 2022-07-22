@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yedam.quiz.appl.mapper.ApplMapper">
+<mapper namespace="com.yedam.quiz.student.mapper.ApplMapper">
 	<insert id="insertAppl">
 		INSERT INTO APPL (
 		EXAM_NO,
@@ -30,4 +29,21 @@
 		)
 
 	</insert>
+	<!-- 전체조회 -->
+	<select id="getApplList" parameterType="ApplVO" resultType="ApplVO">
+		SELECT e.exam_no, e.exam_nm, e.start_dttm, e.end_dttm, a.std_no, a.appl_dttm, a.tt_scor
+		FROM appl a JOIN exam e
+    		ON ( a.exam_no = e.exam_no )
+		WHERE a.std_no = #{stdNo}
+	</select>
+	
+	<!-- 채점결과 -->
+	<update id="getExamResult" parameterType="ApplVO">
+		UPDATE appl
+		  SET
+		  	appl_dttm = #{applDttm},
+		  	tt_scor = (SELECT COUNT(scor) FROM appl_ansr WHERE ansr_yn = '1' AND std_no = #{stdNo} AND exam_no = #{examNo})
+		WHERE std_no = #{stdNo} 
+		  AND exam_no = #{examNo}
+	</update>
 </mapper>

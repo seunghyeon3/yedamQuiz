@@ -21,18 +21,18 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">온라인 퀴즈응시 시스템</h3></div>
                                     <div class="card-body">
-                                        <form id="info" action="studentLogin">
+                                        <form id="info" action="mypage" method="post" onsubmit="return false">
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="studentNo" type="text" placeholder="학번" required/>
+                                                <input class="form-control" id="stdNo" name="stdNo" type="text" placeholder="학번" required/>
                                                 <label for="studentNo">학번</label>
                                             </div>
                                             <div class="form-floating mb-3">
-                                                <input class="form-control" id="studentName" type="text" placeholder="이름" required />
+                                                <input class="form-control" id="stdNm" name="stdNm" type="text" placeholder="이름" required />
                                                 <label for="studentName">이름</label>
                                             </div>                                         
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <a class="small"></a>
-                                                <button type="submit" class="btn btn-primary">로그인</button>
+                                                <button type="button" class="btn btn-primary" onclick="javascript:login();">로그인</button>
                                             </div>
                                         </form>
                                     </div>
@@ -45,6 +45,15 @@
                     </div>
                 </main>
             </div>
+              <div id="message" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">              
+                  <strong class="me-auto">Message</strong>               
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    학번과 이름을 확인해주시기 바랍니다.
+                </div>
+              </div>
             <div id="layoutAuthentication_footer">
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
@@ -57,5 +66,24 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
+        <script>
+        function login(){
+    		fetch('loginInfo',{
+                method : 'POST',
+                body : new FormData(info)
+            })
+            .then(response => response.text())
+            .then(data => {
+                if(data == "fail"){
+                    const toastLiveExample = document.getElementById('message');
+                    const toast = new bootstrap.Toast(toastLiveExample);
+                    toast.show();
+                }else{
+                    info.submit();
+                }
+            })
+            .catch(reject => console.log(reject)); 
+    	}
+        </script>
     </body>
 </html>

@@ -16,9 +16,8 @@ public class StudentServiceImpl implements StudentService {
 	StudentMapper map;
 	
 	@Override
-	public StudentVO getStudent(StudentVO vo) {
-		
-		return null;
+	public StudentVO getStudent(StudentVO vo) {		
+		return map.getStudent(vo);
 	}
 
 	@Override
@@ -28,17 +27,17 @@ public class StudentServiceImpl implements StudentService {
 
 	@Override
 	public void insertStudent(StudentVO vo) {
-		
-	}
+		map.insertStudent(vo);
+	}	
 
 	@Override
 	public void updateStudent(StudentVO vo) {
-		
+		map.updateStudent(vo);
 	}
 
 	@Override
 	public void deleteStudent(StudentVO vo) {
-		
+		map.deleteStudent(vo);
 	}
 
 }

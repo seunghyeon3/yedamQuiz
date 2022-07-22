@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<mapper namespace="com.yedam.quiz.exam.mapper.QuestionMapper">
 
-<mapper namespace="com.yedam.quiz.question.mapper.QuestionMapper">
 	<insert id="insertQuestion">
 		<selectKey keyProperty="examNo" resultType="int" order="BEFORE">
 			SELECT
@@ -18,5 +17,24 @@
 		#{qestnScor}
 		)
 	</insert>
-</mapper>
   
+	<!-- 전체조회 -->
+	<select id="getQuestionList" parameterType="QuestionVO" resultType="QuestionVO">
+		SELECT qe.exam_no, qe.quiz_no, qz.quiz_ctnt, qz.typ_cd, qz.ansr 
+		  FROM question qe JOIN quiz qz
+    		ON qe.quiz_no = qz.quiz_no
+		 WHERE qe.exam_no = #{examNo}
+	  ORDER BY qe.exam_no, qe.quiz_no
+	</select>
+	
+	<!-- 단건조회 -->
+	<select id="getQuestin" parameterType="QuestionVO" resultType="QuestionVO">
+		SELECT qe.exam_no, qe.quiz_no, qz.quiz_ctnt, qz.typ_cd, qz.ansr 
+		  FROM question qe JOIN quiz qz
+    		ON qe.quiz_no = qz.quiz_no
+		 WHERE qe.exam_no = #{examNo}
+		   AND qe.quiz_no = #{quizNo}
+	  ORDER BY qe.exam_no, qe.quiz_no
+	</select>
+</mapper>
+

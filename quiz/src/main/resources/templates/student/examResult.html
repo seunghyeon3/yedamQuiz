@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<title>시험결과</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+	crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="container">
+				<!-- 학생정보 : 강의실, 과정명, 학번, 이름 -->
+				<div class="row mt-2">
+					<div class="col-1"><h5 class="text-center" th:text="${ studentInfo.ltRoom } + '강의실'"></h5></div>
+					<div class="col-9"><h5 class="text-center" th:text="${ studentInfo.corsNm }"></h5></div>
+					<div class="col-1"><h5 class="text-center" th:text="${ studentInfo.stdNo }" id="stdNo"></h5></div>
+					<div class="col-1"><h5 class="text-center" th:text="${ studentInfo.stdNm }"></h5></div>
+				</div>	
+				<!-- 시험지정보 : 시험번호, 시험명, 응시기간 -->
+				<div class="row mt-5">					
+					<div class="col-3"><h3 class="text-center" th:text="${examInfo.examNo}" id="examNo"></h3></div>
+					<div class="col-6"><h3 class="text-center" th:text="${examInfo.examNm}"></h3></div>
+					<div class="col-3">
+						<div class="row"><h5 class="text-center" th:text="${ examInfo.startDttm }"></h5></div>
+						<div class="row"><h5 class="text-center" th:text="' ~ ' + ${ examInfo.endDttm }"></h5></div>
+					</div>
+				</div>						
+			</div>		
+		</div>
+		<div class="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
+			<div class="col" th:each=" quiz : ${quizList}">
+				<!-- Quiz Format -->
+				<div class="card border-0 rounded-lg mt-5">
+					<!-- Quiz Content -->
+					<div class="card-header">
+						<label th:for="${quiz.quizNo}" th:text="${quiz.quizNo}"></label>
+						<h3 class="text-center font-weight-light my-4" th:id="${quiz.quizNo}" th:utext=${quiz.quizCtnt}></h3>
+					</div>
+					<!-- 객관식 Section -->
+					<div class="card-body row justify-content-center align-items-center g-2 mb-2" th:if="${quiz.typCd.equals('T01')} " th:each="section : ${sectionInfo[ quiz.quizNo ]}">
+						<label><input type="radio" th:name="${section.quizNo}" th:value="${section.sectNo}">[[ ' ' + ${section.sectNo} +') '+ ${section.sectCtnt} ]]</input></label>
+					</div>
+					<!-- 주관식 -->
+					<div class="card-body row justify-content-center align-items-center g-2 mb-2" th:unless="${quiz.typCd.equals('T01')} ">
+						<input type="text" th:name="${quiz.quizNo}">
+					</div>
+				</div>
+				<!-- Quiz Format End -->
+			</div>
+		</div>
+		<div class="btn-group mt-5 d-flex justify-content-center align-content-center" role="group">
+			<button type="button" class="btn btn-outline-secondary" th:onclick="submitExam( [[ ${quizList} ]] )">제출가기</button>
+			<button type="button" class="btn btn-outline-secondary" th:onclick="moveOnMypage( [[ ${studentInfo} ]] )">뒤로가기</button>
+		</div>
+	</div>
+	<div id="alert" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+         <div class="toast-header">              
+              <strong class="me-auto">Message</strong>               
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+         </div>
+         <div class="toast-body">
+         	<p id="message"></p>
+         </div>
+     </div>
+	<div id="layoutAuthentication_footer">
+		<footer class="py-4 bg-light mt-auto">
+			<div class="container-fluid px-4">
+				<div class="d-flex align-items-center justify-content-between small">
+					<div class="text-muted">Copyright &copy; 예담직업전문학교 2022</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+	<form id="stdInfo" method="POST" action="mypage">
+		<input type="hidden" id="stdNo" name="stdNo">
+		<input type="hidden" id="stdNm" name="stdNm">
+	</form>
+	<form id="examInfo" method="POST" action="gradeExam">
+	</form>
+	<script>
+		function moveOnMypage(studentInfo){
+			let form = document.getElementById('stdInfo');
+			form.stdNo.value = studentInfo.stdNo;
+			form.stdNm.value = studentInfo.stdNm;
+			form.submit();
+		}
+		
+		function submitExam(quizList){
+			let form = document.getElementById('examInfo');
+			
+			//시험 및 학생 정보
+			let sNo = document.getElementById('stdNo').innerText;
+			let eNo = document.getElementById('examNo').innerText;
+
+			quizList.forEach((quiz, index, array) => {
+				//문제유형 확인
+				if(quiz.typCd == 'T01'){
+					//객관식
+					let selected = document.querySelector('input[name="'+quiz.quizNo +'"]:checked');
+					
+					if(selected == null){
+						examAlert(quiz.quizNo);
+						return;
+					}
+					
+					createTag(form, index, quiz.quizNo, eNo, sNo, selected.value);
+					
+				}
+				else{
+					//주관식
+					let selected = document.getElementsByName(quiz.quizNo)[0].value;
+					
+					if(selected == null || selected == ''){
+						examAlert(quiz.quizNo);
+						return;
+					}
+					
+					createTag(form, index, quiz.quizNo, eNo, sNo, selected);
+				}
+			});
+			
+
+			form.submit();
+		}
+		
+		function examAlert(quizNo){
+			const toastLiveExample = document.getElementById('alert');
+            const toast = new bootstrap.Toast(toastLiveExample);
+            document.getElementById('message').innerText = "문제 " + quizNo +"번의 답안이 비어있습니다.";
+            toast.show();
+		}
+		
+		function createTag(form, index, quizNo, examNo, stdNo, ansr){
+			
+			let inputTag = document.createElement('input');
+			inputTag.type="hidden";
+			inputTag.name="ansrlist["+index+"].quizNo";
+			inputTag.value=quizNo;
+			form.append(inputTag);
+
+			inputTag = document.createElement('input');
+			inputTag.type="hidden";
+			inputTag.name="ansrlist["+index+"].examNo";
+			inputTag.value=examNo;
+			form.append(inputTag);
+
+			inputTag = document.createElement('input');
+			inputTag.type="hidden";
+			inputTag.name="ansrlist["+index+"].stdNo";
+			inputTag.value=stdNo;
+			form.append(inputTag);
+
+			inputTag = document.createElement('input');
+			inputTag.type="hidden";
+			inputTag.name="ansrlist["+index+"].ansr";
+			inputTag.value=ansr;
+			form.append(inputTag);
+			
+		}
+	</script>
+	<script>
+	</script>
+</body>
+</html>
