@@ -50,4 +50,9 @@ public class ApplServiceImpl implements ApplService {
 		map.getExamResult(applVO);		
 	}
 
+	@Override
+	public void firstInsertAppl(int examNo, String stdNo) {
+		map.firstInsertAppl(examNo, stdNo);		
+	}
+
 }

@@ -11,6 +11,6 @@ public interface ApplService {
 	public void insertAppl(ApplVO applVO);
 	public void updateAppl(ApplVO applVO);
 	public void deleteAppl(ApplVO applVO);
-	
+	public void firstInsertAppl(int examNo,String stdNo);
 	public void getExamResult(ApplVO applVO);
 }
