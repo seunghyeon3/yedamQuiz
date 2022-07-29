@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.yedam.quiz.comm.Paging;
 import com.yedam.quiz.comm.service.CodeService;
 import com.yedam.quiz.comm.service.CodeVO;
+import com.yedam.quiz.comm.service.StdService;
 import com.yedam.quiz.exam.service.ExamService;
 import com.yedam.quiz.exam.service.ExamVO;
 import com.yedam.quiz.exam.service.QuestionService;
 import com.yedam.quiz.quiz.service.QuizService;
 import com.yedam.quiz.student.service.ApplService;
-import com.yedam.quiz.student.service.StudentService;
 
 @Controller
 public class ExamController {
@@ -27,7 +27,7 @@ public class ExamController {
 	private QuizService quizService;
 
 	@Autowired
-	private StudentService studentService;
+	private StdService studentService;
 
 	@Autowired
 	private CodeService codeService;
@@ -42,7 +42,7 @@ public class ExamController {
 	public String examRegistForm(Model model) {
 		model.addAttribute("quizList", quizService.getQuizList(null));
 		// 훈련생 리스트
-		model.addAttribute("studentList", studentService.getStudentList());
+		model.addAttribute("studentList", studentService.getStudentList(null));
 		// 퀴즈 리스트
 		model.addAttribute("sbjtList", codeService.getCodeList(new CodeVO("SBJT")));
 		return "exam/examRegist";

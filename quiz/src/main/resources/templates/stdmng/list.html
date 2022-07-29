@@ -6,21 +6,20 @@
 
 	<style>
 		.ctnt { cursor : pointer; text-decoration: underline; }
+		#frmList th, #frmList td { text-align: center}
 	</style>
 	<!--  페이지 타이틀 -->
-	<h1 class="mt-4">문제은행  </h1>
-	<div th:text="#{aply.end}"></div> <div th:utext="#{aply.end}"></div>
+	<h1 class="mt-4">학생관리</h1>
 	<!-- breadcrump / 도움말 -->
     <ol class="breadcrumb mb-4">
 	    <li><a class="float-right" data-bs-toggle="collapse" href="#collapseHelp" role="button" aria-expanded="false" aria-controls="collapseHelp">
        	<img src="assets/img/free-icon-help-6269920.png" width="20px"></a></li>
-        <li class="breadcrumb-item"><a href="index.html">문제은행</a></li>
-        <li class="breadcrumb-item active">문제조회</li>
+        <li class="breadcrumb-item"><a href="index.html">학생관리</a></li>
     </ol>		
   
     <!--  페이지 도움말 시작 -->
 	<div class="collapse  g-3 mb-2" id="collapseHelp">
-		<div class="card card-body">문제은행관리는.<br>. <br>. <br>.</div>
+		<div class="card card-body">학생관리.<br>. <br>. <br>.</div>
 	</div>
     <!--  페이지 도움말 종료 -->
     
@@ -31,27 +30,18 @@
 			<form name="frmSearch" id="frmSearch">
 				<input type="hidden" name="page" value="1">
 				<div class="row g-3">
-					<label for="typCd" class="col-sm-2 col-form-label">문제유형</label>
+					<label for="corsNo" class="col-sm-2 col-form-label">과정</label>
 					<div class="col-sm-3">
-						<div class="form-check form-check-inline">  
-						  <input class="form-check-input" name="typCd" type="radio" value="" >
-						  <label class="form-check-label" for="typCd" >전체</label>
-						</div>
-						<th:block  th:each="code : ${codes.TYP}">
-						    <div class="form-check form-check-inline">  
-							  <input class="form-check-input" name="typCd" type="radio" id="typCd" th:value="${code.cd}" >
-							  <label class="form-check-label" for="typCd" th:text="${code.nm}">1</label>
-							</div>
-						</th:block>
-					</div>
-					<label for="sbjtCd" class="col-sm-2 col-form-label">과목</label>
-					<div class="col-sm-3">
-						<select class="form-select" aria-label="Default select example" id="sbjtCd" name="sbjtCd" >
-						  <option selected value="">과목선택</option>  
-						  <option th:each="code : ${codes.SBJT}" 
-						          th:value="${code.cd}" th:text="${code.nm}"
-						          th:selected="${code.cd}==${quizVO.sbjtCd}"></option>
+						<select class="form-select" aria-label="Default select example" id="corsNo" name="corsNo" >
+						  <option selected value="">과정선택</option>  
+						  <option th:each="cors : ${corss}" 
+						          th:value="${cors.corsNo}" th:text="|${cors.ltRoom}강 ${cors.corsNm}(${cors.sdt}~${cors.edt})|"
+						          th:selected="${cors.corsNo}==${stdVO.corsNo}"></option>
 						</select> 
+					</div>
+					<label for="sbjtCd" class="col-sm-2 col-form-label">이름</label>
+					<div class="col-sm-3">
+						<input class="form-control" id="stdNm" name="stdNm" > 
 					</div>
 				</div>
 				<div class="row g-3">
@@ -62,15 +52,10 @@
 						  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="useYn" value="Y" checked>
 						</div>  
 					</div>
-					<label for="quizCtnt" class="col-sm-2 col-form-label">문제</label>
-					<div class="col-sm-3">
-						<input type="text" id="quizCtnt" name="quizCtnt" class="form-control" 
-						       th:value="${quizVO.quizCtnt}" placeholder="내용">
+					<div class="btn-group col-sm-3" role="group">
+						<button type="button" class="btn btn-warning" id="btnInit">초기화</button>
+						<button type="submit" class="btn btn-primary" id="btnSearch">검색</button>
 					</div>
-				</div>
-				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-warning" id="btnInit">초기화</button>
-					<button type="submit" class="btn btn-primary" id="btnSearch">검색</button>
 				</div>
 			</form>
 		</div>
@@ -82,8 +67,8 @@
 			<button type="button" class="btn btn-outline-primary" id="btnOptUse">선택사용</button>
 			<button type="button" class="btn btn-outline-primary" id="btnOptNoUse">선택미사용</button>
 			<button type="button" class="btn btn-outline-primary" id="btnExcelDown">엑셀다운로드</button>
+			<button type="button" class="btn btn-outline-primary" id="btnBatchReg">엑셀업로드</button>
 			<button type="button" class="btn btn-outline-primary" id="btnReg">개별등록</button>
-			<button type="button" class="btn btn-outline-primary" id="btnBatchReg">일괄등록</button>
 		</div>
 		<!--  버튼 그룹 종료 -->
 	
@@ -94,27 +79,25 @@
 				<thead>
 					<tr>
 						<th>선택</th>
+						<th>과정명</th>
+						<th>기간</th>
+						<th>강의실</th>
 						<th>번호</th>
-						<th>과목</th>
-						<th>문제유형</th>
-						<th>문제명</th>
-						<th>등록일</th>
+						<th>이름</th>
+						<th>출생년도</th>
 						<th>사용여부</th>
-						<th>출제수</th>
-						<th>정답율</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="quiz : ${quizList}">
-						<td><input type="checkbox" name="quizNo" th:value="${quiz.quizNo}"></td>
-						<td th:text="${quiz.quizNo}">1</td>
-						<td th:text="${quiz.sbjtNm}">중</td>
-						<td th:text="${quiz.typNm}">자바</td>
-						<td class="ctnt" th:text="${quiz.quizCtnt}" th:onclick="'window.location.href = \'' + @{/quizUpd?quizNo={quizNo}(quizNo=${quiz.quizNo})} + '\''">오버라이딩이란?</td>
-						<td th:text="${#dates.format(quiz.regDt, 'yyyy-MM-dd')}">2022-01-01</td>
-						<td th:text="${quiz.useYn}">Y</td>
-						<td th:text="${#strings.replace(quiz.questCnt, '/(<([^>]+)>)/ig', '')}">10</td>
-						<td th:text="${quiz.rightRate}">50%</td>
+					<tr th:each="std : ${stdList}">
+						<td><input type="checkbox" name="stdNo" th:value="${std.stdNo}"></td>
+						<td th:text="${std.corsNm}">자바개발자</td>
+						<td th:text="|${std.sdt} ~ ${std.edt}|">2201~2210</td>
+						<td th:text="${std.ltRoom}">1강의실</td>
+						<td th:text="${std.stdNo}">2020101</td>
+						<td th:text="${std.stdNm}">홍길동</td>
+						<td>[[${std.year}]]년생</td>
+						<td th:text="${std.useYn}">Y</td>
 					</tr>
 				</tbody>
 			</table>
@@ -140,6 +123,52 @@
 	</nav>
 	<!-- 페이징 종료 -->
 	
+	
+	<!-- Modal 시작 -->
+	<div class="modal fade" id="stdModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="staticBackdropLabel">일괄등록</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <form>
+	        	<!--  과정  -->
+	        	<div class="mb-3 row">
+	        		<label for="corsNo" class="col-sm-3 col-form-label">과정</label>
+					<div class="col-sm-8">
+						<select class="form-select" aria-label="Default select example" id="corsNo" name="corsNo" >
+						  <option selected value="">과정선택</option>  
+						  <option th:each="cors : ${corss}" 
+						          th:value="${cors.corsNo}" th:text="|${cors.ltRoom}강 ${cors.corsNm}(${cors.sdt}~${cors.edt})|"
+						          th:selected="${cors.corsNo}==${stdVO.corsNo}"></option>
+						</select> 
+					</div>
+				</div>
+				
+				<!--  업로드 파일  -->
+				<div class="mb-3 row">
+				  <label for="file" class="col-sm-3 col-form-label">엑셀파일</label>
+				  <div class="col-sm-8">
+				    <input type="file" id="file" name="file"> 
+				  </div>
+				</div>	
+				
+				<div  class="text-center">
+					<button type="button" class="btn btn-success" id="btnSave">저장</button>
+					<button type="button" class="btn btn-warning" id="close">종료</button>
+				</div>
+	        </form>
+	      </div>
+<!-- 	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	      </div> -->
+	    </div>
+	  </div>
+	</div>
+	<!-- Modal 종료 -->
+	
 	<script>
 	function gopage(p){
 		frmSearch.page.value = p;
@@ -148,6 +177,9 @@
 	
 	$(function(){
 		
+		//모달초기화
+		let smodal = new bootstrap.Modal('#stdModal', {})
+		
 		searchProc();		//검색
 		initProc();			//초기화
 		optDelProc();  		//선택삭제
@@ -155,7 +187,9 @@
 		optNoUseProc();		//선택미사용
 		excelDownProc();	//엑셀다운로드
 		regProc();			//개별등록
+		batchPopup();		//일괄등록팝업
 		batchRegProc();		//일괄등록
+		
 		
 		/*--------------
 		검색 버튼 핸들러
@@ -171,14 +205,18 @@
 		----------------*/
 		function initProc(){
 			$("#btnInit").on("click", function(){
+				frmSearch.reset();
 				$("#frmSearch").find('select, type:text').each(function(){
 					$(this).val('');
 				});
+/*				
 				$("#frmSearch").find(':radio, :checkbox').each(function(){
 					$(this).val([]);
 				});
+*/
 			})
-		}
+
+		}		
 		
 		/*--------------
 		선택삭제 버튼 핸들러
@@ -212,18 +250,18 @@
 		선택미사용 서버 처리 ajax 요청
 		----------------*/
 		function useYnChangeProc(useYn){
-			let data = {useYn : useYn, quizNo : [] };
+			let data = {useYn : useYn, stdNo : [] };
 			//선택된 퀴즈번호를 파라미터로 만듬
-			$("#frmList [name=quizNo]:checked").each(function(i,el){
-				data.quizNo.push(el.value);
+			$("#frmList [name=stdNo]:checked").each(function(i,el){
+				data.stdNo.push(el.value);
 			});
 			
-			if( ! confirm(data.quizNo + " 선택된 문제를 변경할까요?") ) {
+			if( ! confirm(data.stdNo + " 선택된 학생 상테를 변경할까요?") ) {
 				return;
 			}
 			//사용여부 변경 요청
 			$.ajax({
-				url : "quizUpdateUseYn",
+				url : "stdUpdateUseYn",
 				method : 'post',
 				data : JSON.stringify(data),
 				contentType : "application/json",
@@ -248,16 +286,30 @@
 		----------------*/	
 		function regProc(){
 			$("#btnReg").on("click", function(){
-				location.href="/quizReg"
+				location.href="/stdReg"
 			})
 		}
 		
 		/*--------------
-		일괄등록 버튼 핸들러
-		----------------*/	
-		function batchRegProc(){
+		일괄등록(엑셀업로드) 팝업 버튼 핸들러
+		----------------*/			
+		function batchPopup(){
 			$("#btnBatchReg").on("click", function(){
+				
+				//모달 show
+				smodal.show( document.getElementById("stdModal") );
 			})
+		}
+		
+		/*--------------
+		일괄등록(엑셀업로드) 버튼 핸들러
+		----------------*/			
+		function batchRegProc(){
+			$.ajax({
+				
+			}).done(function(){
+				 
+			 });
 		}
 	})
 	

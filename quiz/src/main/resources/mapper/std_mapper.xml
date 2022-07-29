@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.quiz.comm.mapper.StdMapper">
+
+	<sql id="criteria">
+		<if test="corsNo !=null and corsNo != ''">
+			AND S.CORS_NO = #{corsNo}
+		</if>
+		<if test="useYn !=null and useYn != ''">
+			AND S.USE_YN = #{useYn}
+		</if>
+	</sql>
+
+	<!-- 건수조회 -->
+	<select id="getCount" parameterType="StdVO"	resultType="int">
+
+	   SELECT COUNT(*) 
+		 FROM STD S,
+		      CORS C
+		WHERE S.CORS_NO = C.CORS_NO 
+		<include refid="criteria"/>
+
+	</select>
+	
+	<!-- 전체조회 -->
+	<select id="getStudentList" parameterType="StdVO"
+		resultType="StdVO">
+
+	   SELECT S.STD_NO, 
+	          S.STD_NM, 
+	          S.CORS_NO, 
+	          S.YEAR,
+	          S.USE_YN,
+	          C.LT_ROOM,
+	          C.CORS_NM,
+	          C.SDT,
+	          C.EDT
+		 FROM STD S,
+		      CORS C
+		WHERE S.CORS_NO = C.CORS_NO 
+		<include refid="criteria"/>
+		ORDER BY C.LT_ROOM, S.STD_NM
+
+	</select>
+	<!-- 단건조회 -->
+	<select id="getStudent" parameterType="StdVO"
+		resultType="StdVO">
+		
+	  SELECT S.STD_NO, 
+	         S.STD_NM, 
+	         C.CORS_NO, 
+	         C.CORS_NM, 
+	         C.LT_ROOM,
+	         C.SDT,
+	         C.EDT
+		FROM STD S JOIN CORS C
+			  ON (S.CORS_NO = C.CORS_NO)
+		WHERE S.STD_NO = #{stdNo}
+		  <if test="stdNm != null and stdNm != ''">
+		  AND S.STD_NM = #{stdNm}
+		  </if>
+		  AND S.USE_YN = 1
+	</select>
+	
+	<!-- 신규 학생번호 조회 -->
+	<select id="getStdNo" resultType="string">
+	SELECT SUBSTR(CORS_NO,0,6) || LPAD(LT_ROOM,2,'0') || LPAD((SELECT nvl(to_number(substr(MAX(STD_NO),9)),0)+1 FROM STD WHERE CORS_NO = #{corsNo}),2,'0') 
+	  FROM CORS
+	 WHERE CORS_NO = #{corsNo}	  
+	</select>
+	
+	<!-- 학생 등록 -->
+	<insert id="insertStudent"> 
+	  INSERT INTO 
+	     STD (STD_NO, 
+              STD_NM, 
+              USE_YN, 
+        	  YEAR,
+              CORS_NO 
+             )
+	  VALUES (#{stdNo},
+	          #{stdNm},
+	          'Y',
+	          #{year},
+	          #{corsNo}
+	         )               
+	</insert>
+	
+	<!-- 학생 수정 -->
+	<update id="updatStudent"> 
+	  UPDATE STD
+	     SET STD_NM = #{stdNm}
+	   WHERE STD_NO = #{stdNo} 	
+	</update>
+	
+	<!-- 학생 삭제 -->
+	<delete id="deleteStudent">
+	  DELETE FROM STD
+	   WHERE STD_NO = #{stdNo} 	
+	</delete>
+	
+	<!--  사용여부 변경 -->
+    <update id="updateUseYn" parameterType="StdReqVO">
+        UPDATE  STD SET    
+				USE_YN  = #{useYn}
+		 WHERE  STD_NO in 
+		 <foreach collection="stdNo" open="(" close=")" separator="," item="no">#{no}</foreach>
+    </update>
+    
+    <select id="getCorsList" resultType="CorsVO">
+    	SELECT * FROM CORS
+    </select>
+</mapper>

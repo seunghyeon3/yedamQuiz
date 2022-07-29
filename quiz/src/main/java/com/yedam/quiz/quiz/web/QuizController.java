@@ -99,7 +99,7 @@ public class QuizController {
 	}
 	
 	//선택사용/미사용변경
-	@PostMapping("/updateUseYn")  
+	@PostMapping("/quizUpdateUseYn")  
 	@ResponseBody
 	public Map<String, Integer> updateUseYn(Model model, @RequestBody QuizReqVO vo) {
 		//사용여부변경

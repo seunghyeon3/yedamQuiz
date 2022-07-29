@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.yedam.quiz.comm.service.StdService;
+import com.yedam.quiz.comm.service.StdVO;
 import com.yedam.quiz.exam.service.ExamService;
 import com.yedam.quiz.exam.service.ExamVO;
 import com.yedam.quiz.exam.service.QuestionService;
@@ -19,13 +21,11 @@ import com.yedam.quiz.student.service.ApplAnsrService;
 import com.yedam.quiz.student.service.ApplAnsrVO;
 import com.yedam.quiz.student.service.ApplService;
 import com.yedam.quiz.student.service.ApplVO;
-import com.yedam.quiz.student.service.StudentService;
-import com.yedam.quiz.student.service.StudentVO;
 
 @Controller
 public class StudentController {
 	@Autowired
-	private StudentService studentService;
+	private StdService studentService;
 	
 	@Autowired
 	private ApplService applService;
@@ -50,8 +50,8 @@ public class StudentController {
 	
 	@PostMapping("loginInfo")
 	@ResponseBody
-	public String studentInfo(StudentVO studentVO, Model model) {
-		StudentVO loginInfo = studentService.getStudent(studentVO);
+	public String studentInfo(StdVO studentVO, Model model) {
+		StdVO loginInfo = studentService.getStudent(studentVO);
 		
 		if(loginInfo == null) {
 			return "fail";
@@ -60,9 +60,9 @@ public class StudentController {
 		}
 	}
 	@PostMapping("mypage")
-	public String mypage(StudentVO studentVO, Model model) {
+	public String mypage(StdVO studentVO, Model model) {
 		//학번과 이름 -> 학번, 이름, 과정번호, 과정명
-		StudentVO studentInfo = studentService.getStudent(studentVO);
+		StdVO studentInfo = studentService.getStudent(studentVO);
 		model.addAttribute("student", studentInfo);
 		
 		//학생번호 -> 시험지번호, 시험지명, 시작일시, 종료일시, 응시일시(응시여부확인차)
@@ -77,7 +77,7 @@ public class StudentController {
 	@PostMapping("studentExam")
 	public String studentExam(int examNo, String stdNo, Model model) {
 		//학생 정보
-		StudentVO studentInfo = new StudentVO();
+		StdVO studentInfo = new StdVO();
 		studentInfo.setStdNo(stdNo);
 		studentInfo = studentService.getStudent(studentInfo);
 		model.addAttribute("studentInfo", studentInfo);
@@ -110,7 +110,7 @@ public class StudentController {
 	@PostMapping("studentResult")
 	public String studentResult(int examNo, String stdNo, Model model) {
 		//학생 정보
-		StudentVO studentInfo = new StudentVO();
+		StdVO studentInfo = new StdVO();
 		studentInfo.setStdNo(stdNo);
 		studentInfo = studentService.getStudent(studentInfo);
 		model.addAttribute("studentInfo", studentInfo);
