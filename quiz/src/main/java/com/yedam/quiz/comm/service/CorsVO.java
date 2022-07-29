@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CourseVO extends SearchVO {
+public class CorsVO extends SearchVO {
 	private String corsNo;
 	private String corsNm;
 	private String sdt;

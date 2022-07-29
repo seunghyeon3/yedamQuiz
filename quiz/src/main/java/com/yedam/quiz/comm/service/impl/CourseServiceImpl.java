@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.quiz.comm.mapper.CourseMapper;
 import com.yedam.quiz.comm.service.CourseService;
-import com.yedam.quiz.comm.service.CourseVO;
+import com.yedam.quiz.comm.service.CorsVO;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -16,17 +16,17 @@ public class CourseServiceImpl implements CourseService {
 	CourseMapper courseMapper;
 
 	@Override
-	public CourseVO getCourse(CourseVO courseVO) {
+	public CorsVO getCourse(CorsVO courseVO) {
 		return courseMapper.getCourse(courseVO);
 	}
 
 	@Override
-	public List<CourseVO> getCourseList(CourseVO courseVO) {
+	public List<CorsVO> getCourseList(CorsVO courseVO) {
 		return courseMapper.getCourseList(courseVO);
 	}
 
 	@Override
-	public void insertCourse(CourseVO courseVO) {
+	public void insertCourse(CorsVO courseVO) {
 		courseMapper.insertCourse(courseVO);
 	}
 

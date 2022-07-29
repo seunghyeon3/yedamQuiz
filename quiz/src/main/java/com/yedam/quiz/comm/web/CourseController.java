@@ -1,4 +1,4 @@
-package com.yedam.quiz.statics.web;
+package com.yedam.quiz.comm.web;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.yedam.quiz.comm.service.CourseService;
-import com.yedam.quiz.comm.service.CourseVO;
+import com.yedam.quiz.comm.service.CorsVO;
 
 @Controller
 public class CourseController {
@@ -26,20 +26,20 @@ public class CourseController {
 	CourseService service;
 
 	@RequestMapping("getCourse/{corsNo}")
-	public String getCourse(@PathVariable String corsNo, Model model, CourseVO courseVO) {
+	public String getCourse(@PathVariable String corsNo, Model model, CorsVO courseVO) {
 		courseVO.setCorsNo(corsNo);
 		model.addAttribute("course", service.getCourse(courseVO));
 		return "course/getCourse";
 	}
 
 	@RequestMapping("courseList")
-	public String courseList(Model model, CourseVO courseVO) {
+	public String courseList(Model model, CorsVO courseVO) {
 		model.addAttribute("courseList", service.getCourseList(courseVO));
 		return "course/courseList";
 	}
 
 	@GetMapping("registerCourse")
-	public String registerCourseForm(Model model, CourseVO courseVO) {
+	public String registerCourseForm(Model model, CorsVO courseVO) {
 		// service.insertCourse(courseVO);
 		Map<String, String> basic = new HashMap<>();
 		basic.put("id", "hong");
@@ -51,7 +51,7 @@ public class CourseController {
 	}
 
 	@PostMapping("registerCourse")
-	public String registerCourse(CourseVO courseVO) {
+	public String registerCourse(CorsVO courseVO) {
 		System.out.println(courseVO);
 		service.insertCourse(courseVO);
 		return "course/getCourseList";

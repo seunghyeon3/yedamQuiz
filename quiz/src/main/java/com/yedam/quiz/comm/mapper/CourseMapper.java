@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.yedam.quiz.comm.service.CourseVO;
+import com.yedam.quiz.comm.service.CorsVO;
 
 @Mapper
 public interface CourseMapper {
-	public CourseVO getCourse(CourseVO courseVO);
-	public List<CourseVO> getCourseList(CourseVO courseVO);
-	public void insertCourse(CourseVO courseVO);
+	public CorsVO getCourse(CorsVO courseVO);
+	public List<CorsVO> getCourseList(CorsVO courseVO);
+	public void insertCourse(CorsVO courseVO);
 }
