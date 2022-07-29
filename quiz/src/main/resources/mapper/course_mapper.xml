@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.quiz.statics.mapper.CourseMapper">
+
+    <select id="getCourse" resultType="CourseVO">
+        select * from cors order by 1
+    </select>
+    
+    <!-- 리스트 -->
+    <select id="getCourseList" resultType="CourseVO">
+    	select
+    </select>
+    
+    <insert id="insertCourse" parameterType="CourseVO">
+    <selectKey resultType="string" keyProperty="corsNo" order="BEFORE">
+     	select decode(max(cors_no), null, '01', lpad(to_number(substr(max(cors_no), 7, 2))+1,2,'0'))  from cors where substr(cors_no,1,6) = to_char(sysdate, 'yymmdd') 
+    </selectKey>
+        INSERT INTO course ( cors_no, cors_nm, sdt, edt, lt_room, use_yn   )
+                        VALUES(
+                                #{corsNo},
+                                #{corsNm},
+                                #{sdt},
+                                #{edt},
+                                #{ltRoom},
+                                #{useYn}
+                               )
+    </insert>
+</mapper>
