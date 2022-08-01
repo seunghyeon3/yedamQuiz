@@ -74,7 +74,7 @@ public class StdController {
 	
 
 	
-	//일괄 등록 처리
+	//일괄 등록 처리(엑셀파일 업로드)
 	@PostMapping("/batchReg")
 	public ResponseEntity<Map<String,Object>> batchReg(Model model, MultipartFile file, StdVO vo) {
 		return ResponseEntity.ok().body(stdService.batchReg(file, vo));

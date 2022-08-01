@@ -30,58 +30,62 @@
 			<form name="frmSearch" id="frmSearch">
 				<input type="hidden" name="page" value="1">
 				<div class="row g-3">
-					<label for="corsNo" class="col-sm-2 col-form-label">과정</label>
-					<div class="col-sm-3">
+					<label for="corsNo" class="col-sm-1 col-form-label text-end">과정</label>
+					<div class="col-sm-8">
 						<select class="form-select" aria-label="Default select example" id="corsNo" name="corsNo" >
 						  <option selected value="">과정선택</option>  
 						  <option th:each="cors : ${corss}" 
-						          th:value="${cors.corsNo}" th:text="|${cors.ltRoom}강 ${cors.corsNm}(${cors.sdt}~${cors.edt})|"
+						          th:value="${cors.corsNo}" th:text="|${cors.ltRoom}강 ${cors.corsNm}(${#strings.substring(cors.sdt,0,10)}~${#strings.substring(cors.edt,0,10)})|"
 						          th:selected="${cors.corsNo}==${stdVO.corsNo}"></option>
 						</select> 
 					</div>
-					<label for="sbjtCd" class="col-sm-2 col-form-label">이름</label>
+				</div>
+				<div class="row g-3">
+					<label for="sbjtCd" class="col-sm-1 col-form-label text-end">이름</label>
 					<div class="col-sm-3">
 						<input class="form-control" id="stdNm" name="stdNm" > 
 					</div>
 				</div>
 				<div class="row g-3">
-					<label for="useYn" class="col-sm-2 col-form-label">사용여부</label>
+					<label for="useYn" class="col-sm-1 col-form-label text-end">사용여부</label>
 					<div class="col-sm-3">
 						<!-- <select name="useYn" id="useYn" class="form-select"><option value="Y">사용<option value="N">미사용</select> -->
 						<div class="form-check form-switch">
-						  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="useYn" value="Y" checked>
+						  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="useYn" value="1" checked>
 						</div>  
 					</div>
+				</div>
+				<div class="row g-3 justify-content-end">
 					<div class="btn-group col-sm-3" role="group">
-						<button type="button" class="btn btn-warning" id="btnInit">초기화</button>
 						<button type="submit" class="btn btn-primary" id="btnSearch">검색</button>
+						<button type="button" class="btn btn-warning" id="btnInit">초기화</button>
 					</div>
 				</div>
 			</form>
 		</div>
 		<!--  검색폼 종료 -->
-		
-		<!--  버튼 그룹 시작 -->
-		<div>
-			<button type="button" class="btn btn-outline-primary" id="btnOptDel">선택삭제</button>
-			<button type="button" class="btn btn-outline-primary" id="btnOptUse">선택사용</button>
-			<button type="button" class="btn btn-outline-primary" id="btnOptNoUse">선택미사용</button>
-			<button type="button" class="btn btn-outline-primary" id="btnExcelDown">엑셀다운로드</button>
-			<button type="button" class="btn btn-outline-primary" id="btnBatchReg">엑셀업로드</button>
-			<button type="button" class="btn btn-outline-primary" id="btnReg">개별등록</button>
-		</div>
-		<!--  버튼 그룹 종료 -->
+
 	
 		<!--  문제 목록 시작 -->
         <div class="card-body">
+			<!--  버튼 그룹 시작 -->
+			<div class="g-3 text-end">
+				<button type="button" class="btn btn-outline-primary" id="btnOptDel">선택삭제</button>
+				<button type="button" class="btn btn-outline-primary" id="btnOptUse">선택사용</button>
+				<button type="button" class="btn btn-outline-primary" id="btnOptNoUse">선택미사용</button>
+				<button type="button" class="btn btn-outline-primary" id="btnExcelDown">엑셀다운로드</button>
+				<button type="button" class="btn btn-outline-primary" id="btnBatchReg">엑셀업로드</button>
+				<button type="button" class="btn btn-outline-primary" id="btnReg">개별등록</button>
+			</div>
+			<!--  버튼 그룹 종료 -->
         	<form id="frmList" name="frmList">
 			<table class="table">
 				<thead>
 					<tr>
 						<th>선택</th>
 						<th>과정명</th>
-						<th>기간</th>
 						<th>강의실</th>
+						<th>기간</th>
 						<th>번호</th>
 						<th>이름</th>
 						<th>출생년도</th>
@@ -92,8 +96,8 @@
 					<tr th:each="std : ${stdList}">
 						<td><input type="checkbox" name="stdNo" th:value="${std.stdNo}"></td>
 						<td th:text="${std.corsNm}">자바개발자</td>
-						<td th:text="|${std.sdt} ~ ${std.edt}|">2201~2210</td>
 						<td th:text="${std.ltRoom}">1강의실</td>
+						<td th:text="|${#calendars.format(std.sdt,'yyyy/MM')} ~ ${#calendars.format(std.edt,'yyyy/MM')}|">2201~2210</td>
 						<td th:text="${std.stdNo}">2020101</td>
 						<td th:text="${std.stdNm}">홍길동</td>
 						<td>[[${std.year}]]년생</td>
@@ -133,7 +137,7 @@
 	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 	      </div>
 	      <div class="modal-body">
-	        <form>
+	        <form name="frmUpload">
 	        	<!--  과정  -->
 	        	<div class="mb-3 row">
 	        		<label for="corsNo" class="col-sm-3 col-form-label">과정</label>
@@ -141,8 +145,7 @@
 						<select class="form-select" aria-label="Default select example" id="corsNo" name="corsNo" >
 						  <option selected value="">과정선택</option>  
 						  <option th:each="cors : ${corss}" 
-						          th:value="${cors.corsNo}" th:text="|${cors.ltRoom}강 ${cors.corsNm}(${cors.sdt}~${cors.edt})|"
-						          th:selected="${cors.corsNo}==${stdVO.corsNo}"></option>
+						          th:value="${cors.corsNo}" th:text="|${cors.ltRoom}강 ${cors.corsNm}(${cors.sdt}~${cors.edt})|"></option>
 						</select> 
 					</div>
 				</div>
@@ -233,7 +236,7 @@
 		----------------*/
 		function optUseProc(){
 			$("#btnOptUse").on("click", function(){
-				useYnChangeProc('Y');			
+				useYnChangeProc('1');			
 			})
 		}
 
@@ -242,7 +245,7 @@
 		----------------*/
 		function optNoUseProc(){
 			$("#btnOptNoUse").on("click", function(){
-				useYnChangeProc('N');
+				useYnChangeProc('0');
 			})
 		}
 		
@@ -298,6 +301,7 @@
 				
 				//모달 show
 				smodal.show( document.getElementById("stdModal") );
+				document.frmUpload.reset();
 			})
 		}
 		
@@ -305,10 +309,37 @@
 		일괄등록(엑셀업로드) 버튼 핸들러
 		----------------*/			
 		function batchRegProc(){
-			$.ajax({
-				
-			}).done(function(){
-				 
+			$("#btnSave").on("click", function(){
+				  const excelFile = $("#file")[0];
+
+				  if(document.frmUpload.corsNo.value == "") {
+					  alert("과정을 선택해주세요");
+					  return;
+				  }
+				  if(excelFile.files.length === 0){
+				    alert("파일은 선택해주세요");
+				    return;
+				  }
+
+				  const formData = new FormData(document.frmUpload)
+				  
+				  $.ajax({
+				    type:"POST",
+				    url: "/batchReg",
+				    processData: false,
+				    contentType: false,
+				    data: formData,
+				    success: function(rtn){
+				    	if(rtn.result) {
+				    		console.log(rtn.cnt + " 건 등록완료")
+				    	} else {
+							alert(rtn.msg)
+				    	}
+				    },
+				    err: function(err){
+				      console.log("err:", err)
+				    }
+				  })
 			 });
 		}
 	})

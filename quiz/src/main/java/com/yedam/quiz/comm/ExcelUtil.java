@@ -61,14 +61,14 @@ public class ExcelUtil {
 			// 첫번째 행(0)은 컬럼 명이기 때문에 두번째 행(1) 부터 검색
 			for (rowIndex = startRowNum; rowIndex < sheet.getLastRowNum() + 1; rowIndex++) {
 				XSSFRow row = sheet.getRow(rowIndex);
-
+				System.out.println(rowIndex+"==============row==" + row.getCell(0));
 				// 빈 행은 Skip
 				if (row.getCell(0) != null && !row.getCell(0).toString().isBlank()) {
 
 					Map<String, Object> map = new HashMap<String, Object>();
 
 					int cells = columnLength;
-
+					System.out.println(columnLength+"==============col");
 					for (columnIndex = 0; columnIndex <= cells; columnIndex++) {
 						XSSFCell cell = row.getCell(columnIndex);
 						map.put(String.valueOf(columnIndex), getCellValue(cell));

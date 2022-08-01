@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tui-grid/4.21.3/tui-grid.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tui-grid/4.21.3/tui-grid.css" />
+	<style>
+		.ctnt { cursor : pointer; text-decoration: underline; }
+		#frmList th, #frmList td { text-align: center}
+	</style>
+	<!--  페이지 타이틀 -->
+	<h1 class="mt-4">코드관리</h1>
+	<!-- breadcrump / 도움말 -->
+    <ol class="breadcrumb mb-4">
+	    <li><a class="float-right" data-bs-toggle="collapse" href="#collapseHelp" role="button" aria-expanded="false" aria-controls="collapseHelp">
+       	<img src="assets/img/free-icon-help-6269920.png" width="20px"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">학생관리</a></li>
+    </ol>		
+  
+    <!--  페이지 도움말 시작 -->
+	<div class="collapse  g-3 mb-2" id="collapseHelp">
+		<div class="card card-body">학생관리.<br>. <br>. <br>.</div>
+	</div>
+    <!--  페이지 도움말 종료 -->
+    
+	<div class="card mb-4">
+	    <!--  검색 폼 시작 -->
+        <!-- <i class="fas fa-table me-1"></i> -->
+        <div class="card-header">
+			<form name="frmSearch" id="frmSearch">
+				<div class="row g-3">
+					<label for="sbjtCd" class="col-sm-1 col-form-label text-end">이름</label>
+					<div class="col-sm-3">
+						<input class="form-control" id="stdNm" name="stdNm" > 
+					</div>
+
+					<label for="useYn" class="col-sm-1 col-form-label text-end">사용여부</label>
+					<div class="col-sm-3">
+						<!-- <select name="useYn" id="useYn" class="form-select"><option value="Y">사용<option value="N">미사용</select> -->
+						<div class="form-check form-switch">
+						  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="useYn" value="1" checked>
+						</div>  
+					</div>
+				</div>
+				<div class="row g-3 justify-content-end">
+					<div class="btn-group col-sm-3" role="group">
+						<button type="submit" class="btn btn-primary" id="btnSearch">검색</button>
+						<button type="button" class="btn btn-warning" id="btnInit">초기화</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!--  검색폼 종료 -->
+
+	
+		<!--  문제 목록 시작 -->
+        <div class="card-body">
+			<div class="row">
+				<div class="col border  m-2">
+					<div class="g-3 text-end">
+						<button type="button" class="btn btn-outline-primary" id="btnOptDel">추가</button>
+						<button type="button" class="btn btn-outline-primary" id="btnOptUse">삭제</button>
+						<button type="button" class="btn btn-outline-primary" id="btnReg">저장</button>
+					</div>				
+					<div id="cdm"></div>
+				</div>
+				<div class="col border  m-2">
+					<div class="g-3 text-end">
+						<button type="button" class="btn btn-outline-primary" id="btnOptDel">추가</button>
+						<button type="button" class="btn btn-outline-primary" id="btnOptUse">삭제</button>
+						<button type="button" class="btn btn-outline-primary" id="btnReg">저장</button>
+					</div>
+					<div id="cdd"></div>
+				</div>
+			</div>
+		</div>
+     </div>
+     <!--  문제 목록 종료 -->
+     
+	<script>
+	$(function(){
+		
+		searchProc();		//검색
+		initProc();			//초기화
+		optDelProc();  		//선택삭제
+		optUseProc();  		//선택사용
+		optNoUseProc();		//선택미사용
+		batchRegProc();		//등록처리
+		gridinit();			//그리드 초기화
+		
+		
+		/*--------------
+		검색 버튼 핸들러
+		----------------*/
+		function searchProc(){
+			$("#btnSearch").on("click", function(){
+				$("#frmSearch").submit();
+			})
+		}
+		
+		/*--------------
+		초기화
+		----------------*/
+		function initProc(){
+			$("#btnInit").on("click", function(){
+				frmSearch.reset();
+				$("#frmSearch").find('select, type:text').each(function(){
+					$(this).val('');
+				});
+			})
+		}		
+		
+		/*--------------
+		선택삭제 버튼 핸들러
+		----------------*/
+		function optDelProc(){
+			$("#btnOptDel").on("click", function(){
+	
+			})
+		}
+		
+		
+		/*--------------
+		선택사용 버튼 핸들러
+		----------------*/
+		function optUseProc(){
+			$("#btnOptUse").on("click", function(){
+				useYnChangeProc('1');			
+			})
+		}
+
+		/*--------------
+		선택미사용 버튼 핸들러
+		----------------*/
+		function optNoUseProc(){
+			$("#btnOptNoUse").on("click", function(){
+				useYnChangeProc('0');
+			})
+		}
+		
+		/*--------------
+		선택미사용 서버 처리 ajax 요청
+		----------------*/
+		function useYnChangeProc(useYn){
+			let data = {useYn : useYn, stdNo : [] };
+			//선택된 퀴즈번호를 파라미터로 만듬
+			$("#frmList [name=stdNo]:checked").each(function(i,el){
+				data.stdNo.push(el.value);
+			});
+			
+			if( ! confirm(data.stdNo + " 선택된 학생 상테를 변경할까요?") ) {
+				return;
+			}
+			//사용여부 변경 요청
+			$.ajax({
+				url : "stdUpdateUseYn",
+				method : 'post',
+				data : JSON.stringify(data),
+				contentType : "application/json",
+				dataType : 'json'
+			}).done(function(result){
+				alert(result.cnt + '건이 처리되었습니다.');
+				location.reload();
+			});	
+		}
+		
+		/*--------------
+		일괄등록(엑셀업로드) 버튼 핸들러
+		----------------*/			
+		function batchRegProc(){
+			$("#btnSave").on("click", function(){
+				  const excelFile = $("#file")[0];
+
+				  if(document.frmUpload.corsNo.value == "") {
+					  alert("과정을 선택해주세요");
+					  return;
+				  }
+				  if(excelFile.files.length === 0){
+				    alert("파일은 선택해주세요");
+				    return;
+				  }
+
+				  const formData = new FormData(document.frmUpload)
+				  
+				  $.ajax({
+				    type:"POST",
+				    url: "/batchReg",
+				    processData: false,
+				    contentType: false,
+				    data: formData,
+				    success: function(rtn){
+				    	if(rtn.result) {
+				    		console.log(rtn.cnt + " 건 등록완료")
+				    	} else {
+							alert(rtn.msg)
+				    	}
+				    },
+				    err: function(err){
+				      console.log("err:", err)
+				    }
+				  })
+			 });
+		}
+		
+		function gridinit(){
+			const gridData = [];
+			const gridm = new tui.Grid({
+			      el: document.getElementById('cdm'),
+			      data: gridData,
+			      scrollX: false,
+			      scrollY: false,
+			      columns: [
+			        {
+			          header: 'Name',
+			          name: 'name'
+			        },
+			        {
+			          header: 'Artist',
+			          name: 'artist'
+			        },
+			        {
+			          header: 'Type',
+			          name: 'type'
+			        }
+			      ]
+			    });
+			
+			const gridd = new tui.Grid({
+			      el: document.getElementById('cdd'),
+			      data: gridData,
+			      scrollX: false,
+			      scrollY: false,
+			      columns: [
+			        {
+			          header: 'Name',
+			          name: 'name'
+			        },
+			        {
+			          header: 'Artist',
+			          name: 'artist'
+			        },
+			        {
+			          header: 'Type',
+			          name: 'type'
+			        }
+			      ]
+			    });
+		}
+	})
+	
+	</script>
+</th:block>

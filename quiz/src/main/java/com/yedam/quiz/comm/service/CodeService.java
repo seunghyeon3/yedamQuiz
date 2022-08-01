@@ -13,4 +13,6 @@ public interface CodeService {
     public void updateCode(CodeVO codeVO);
     public void deleteCode(CodeVO codeVO);
     public Map<String, List<CodeVO>> getCodes(String ... gpCdlist);
+    
+    public List<CodeVO> getGpCodeList(CodeVO codeVO);	//그룹코드
 }

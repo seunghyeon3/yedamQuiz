@@ -54,7 +54,7 @@
 			<div class="col-sm-11" id="checkCategory">
 				<!-- DB에 있는 카테고리 호출 예정, 예시로 3개만 코딩 -->
 				<th:block th:each="sbjt : ${sbjtList}">
-					<input type="checkbox" id="sbjtCd" name="sbjtCd"> <label th:text="${sbjt.nm}"></label> &nbsp;&nbsp;
+					<input type="checkbox" id="sbjtCd" name="sbjtCd" th:value="${sbjt.cd}"> <label th:text="${sbjt.nm}"></label> &nbsp;&nbsp;
 				</th:block>
 			</div>
 			<br><br>
@@ -268,8 +268,8 @@
 				$(this).next().attr("name", `qstn[${idx}].quizNo`);
 			})
 			
-			let checkCategory = document.querySelectorAll("#sbjtCd:checked");
-			document.getElementById('sbjtCd').value =checkCategory[0].nextElementSibling.textContent 
+			//let checkCategory = document.querySelectorAll("#sbjtCd:checked");
+			//document.getElementById('sbjtCd').value =checkCategory[0].nextElementSibling.textContent 
 
 			$('#saveExam').attr("action", "examRegist");
 

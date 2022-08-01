@@ -82,7 +82,7 @@
              )
 	  VALUES (#{stdNo},
 	          #{stdNm},
-	          'Y',
+	          '1',
 	          #{year},
 	          #{corsNo}
 	         )               

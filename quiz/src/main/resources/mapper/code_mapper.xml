@@ -11,7 +11,7 @@
 		WHERE CD = #{cd}
 	</select>
 	
-<!-- 그룹 코드 조회  -->	
+<!-- 상세 코드 조회  -->	
 	<select id="getCodeList" resultType="CodeVO">
 		SELECT  *
 		  FROM COMMON
@@ -19,6 +19,7 @@
 		 ORDER BY NM
 	</select>
 
+<!-- 코드 등록  -->
     <insert id="insertCode" parameterType="CodeVO">
         INSERT INTO COMMON (	CD
 								,NM
@@ -31,4 +32,12 @@
                                 #{useYn}
                             )
     </insert>
+    
+<!-- 그룹 코드 조회  -->   
+	<select id="getGpCodeList" resultType="CodeVO">
+		SELECT  *
+		  FROM COMMON
+		 WHERE GP_CD is null
+		 ORDER BY NM
+	</select>  
 </mapper>

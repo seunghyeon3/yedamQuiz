@@ -48,4 +48,8 @@ public class CodeServiceImpl implements CodeService{
 		}
 		return map;
 	}
+	
+    public List<CodeVO> getGpCodeList(CodeVO codeVO){	//그룹코드
+    	return mapper.getGpCodeList(codeVO);
+    }
 }

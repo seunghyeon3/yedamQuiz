@@ -31,7 +31,7 @@
 			<form name="frmSearch" id="frmSearch">
 				<input type="hidden" name="page" value="1">
 				<div class="row g-3">
-					<label for="typCd" class="col-sm-2 col-form-label">문제유형</label>
+					<label for="typCd" class="col-sm-1 col-form-label text-end">문제유형</label>
 					<div class="col-sm-3">
 						<div class="form-check form-check-inline">  
 						  <input class="form-check-input" name="typCd" type="radio" value="" >
@@ -44,7 +44,7 @@
 							</div>
 						</th:block>
 					</div>
-					<label for="sbjtCd" class="col-sm-2 col-form-label">과목</label>
+					<label for="sbjtCd" class="col-sm-1 col-form-label text-end">과목</label>
 					<div class="col-sm-3">
 						<select class="form-select" aria-label="Default select example" id="sbjtCd" name="sbjtCd" >
 						  <option selected value="">과목선택</option>  
@@ -55,40 +55,44 @@
 					</div>
 				</div>
 				<div class="row g-3">
-					<label for="useYn" class="col-sm-2 col-form-label">사용여부</label>
+					<label for="useYn" class="col-sm-1 col-form-label text-end">사용여부</label>
 					<div class="col-sm-3">
 						<!-- <select name="useYn" id="useYn" class="form-select"><option value="Y">사용<option value="N">미사용</select> -->
 						<div class="form-check form-switch">
 						  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="useYn" value="Y" checked>
 						</div>  
 					</div>
-					<label for="quizCtnt" class="col-sm-2 col-form-label">문제</label>
+					<label for="quizCtnt" class="col-sm-1 col-form-label text-end">문제</label>
 					<div class="col-sm-3">
 						<input type="text" id="quizCtnt" name="quizCtnt" class="form-control" 
 						       th:value="${quizVO.quizCtnt}" placeholder="내용">
 					</div>
 				</div>
-				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-warning" id="btnInit">초기화</button>
-					<button type="submit" class="btn btn-primary" id="btnSearch">검색</button>
+				<div class="row g-3 justify-content-end">
+					<div class="btn-group col-sm-3" role="group">
+						<button type="submit" class="btn btn-primary" id="btnSearch">검색</button>
+						<button type="button" class="btn btn-warning" id="btnInit">초기화</button>
+					</div>
 				</div>
 			</form>
 		</div>
 		<!--  검색폼 종료 -->
 		
-		<!--  버튼 그룹 시작 -->
-		<div>
-			<button type="button" class="btn btn-outline-primary" id="btnOptDel">선택삭제</button>
-			<button type="button" class="btn btn-outline-primary" id="btnOptUse">선택사용</button>
-			<button type="button" class="btn btn-outline-primary" id="btnOptNoUse">선택미사용</button>
-			<button type="button" class="btn btn-outline-primary" id="btnExcelDown">엑셀다운로드</button>
-			<button type="button" class="btn btn-outline-primary" id="btnReg">개별등록</button>
-			<button type="button" class="btn btn-outline-primary" id="btnBatchReg">일괄등록</button>
-		</div>
-		<!--  버튼 그룹 종료 -->
+
 	
 		<!--  문제 목록 시작 -->
         <div class="card-body">
+	        <!--  버튼 그룹 시작 -->
+			<div class="g-3 text-end">
+				<button type="button" class="btn btn-outline-primary" id="btnOptDel">선택삭제</button>
+				<button type="button" class="btn btn-outline-primary" id="btnOptUse">선택사용</button>
+				<button type="button" class="btn btn-outline-primary" id="btnOptNoUse">선택미사용</button>
+				<button type="button" class="btn btn-outline-primary" id="btnExcelDown">엑셀다운로드</button>
+				<button type="button" class="btn btn-outline-primary" id="btnReg">개별등록</button>
+				<button type="button" class="btn btn-outline-primary" id="btnBatchReg">일괄등록</button>
+			</div>
+			<!--  버튼 그룹 종료 -->
+        
         	<form id="frmList" name="frmList">
 			<table class="table">
 				<thead>
@@ -195,7 +199,7 @@
 		----------------*/
 		function optUseProc(){
 			$("#btnOptUse").on("click", function(){
-				useYnChangeProc('Y');			
+				useYnChangeProc('1');			
 			})
 		}
 
@@ -204,7 +208,7 @@
 		----------------*/
 		function optNoUseProc(){
 			$("#btnOptNoUse").on("click", function(){
-				useYnChangeProc('N');
+				useYnChangeProc('0');
 			})
 		}
 		

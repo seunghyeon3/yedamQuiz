@@ -68,7 +68,7 @@ public class StdServiceImpl implements StdService {
 		Map<String, Object> res = new HashMap<String, Object>();
 
 		// 파일 존재하지 않는 경우
-		if (file.isEmpty() || file.getSize()==0) {
+		if (file== null || file.getSize()==0) {
 			res.put("result",false);
 			res.put("msg","Excel 파일을 선택해주세요.");
 			return res;
@@ -76,27 +76,28 @@ public class StdServiceImpl implements StdService {
 
 		// 확장자 유효성 검사 -> 엑셀파일만 가능
 		int idx = file.getOriginalFilename().indexOf(".") ;
-		String ext = file.getOriginalFilename().substring(idx) ;//fileUtil.getExtension(file.getOriginalFilename());
+		String ext = file.getOriginalFilename().substring(idx+1) ;//fileUtil.getExtension(file.getOriginalFilename());
 
 		if (!ext.equals("xlsx") && !ext.equals("xls")) {
 			res.put("result",false);
-			res.put("msg","Excel 파일을 선택해주세요.");
+			res.put("msg","Excel 파일 형식이 아닙니다.");
 			return res;
 		}
 
 		//학생번호조회
-		int stdNo = Integer.parseInt(map.getStdNo(vo));
+		Long stdNo = Long.parseLong(map.getStdNo(vo));
 		List<StdVO> listUser = new ArrayList<StdVO>();
 
 		// 엑셀의 셀데이터를 가져와서 VO에 담기
-		List<Map<String, Object>> listMap = excelUtil.getListData(file, 1, 3);
+		List<Map<String, Object>> listMap = excelUtil.getListData(file, 1, 2);
+		System.out.println(listMap);
 		for (Map<String, Object> map : listMap) {
 			StdVO userInfo = new StdVO();
 		
 			// 각 셀의 데이터를 VO에 set한다.
 			userInfo.setStdNo(String.valueOf(stdNo++));
-			userInfo.setLtRoom(map.get("1").toString());
-			userInfo.setStdNm(map.get("2").toString());
+			userInfo.setStdNm(map.get("0").toString());
+			userInfo.setYear(map.get("1").toString());
 			userInfo.setCorsNo(vo.getCorsNo());
 
 			listUser.add(userInfo);
