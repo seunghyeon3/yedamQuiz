@@ -15,4 +15,5 @@ public interface CodeService {
     public Map<String, List<CodeVO>> getCodes(String ... gpCdlist);
     
     public List<CodeVO> getGpCodeList(CodeVO codeVO);	//그룹코드
+    public void updateCodeData(GridData<CodeVO> data);
 }

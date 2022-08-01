@@ -57,19 +57,19 @@
 		<!--  문제 목록 시작 -->
         <div class="card-body">
 			<div class="row">
-				<div class="col border  m-2">
+				<div class="col-5 border">
 					<div class="g-3 text-end">
-						<button type="button" class="btn btn-outline-primary" id="btnOptDel">추가</button>
-						<button type="button" class="btn btn-outline-primary" id="btnOptUse">삭제</button>
-						<button type="button" class="btn btn-outline-primary" id="btnReg">저장</button>
+						<button type="button" class="btn btn-outline-primary" id="btnMasterAdd">추가</button>
+						<button type="button" class="btn btn-outline-primary" id="btnMasterDel">삭제</button>
+						<button type="button" class="btn btn-outline-primary" id="btnMasterSave">저장</button>
 					</div>				
 					<div id="cdm"></div>
 				</div>
-				<div class="col border  m-2">
+				<div class="col-7 border">
 					<div class="g-3 text-end">
-						<button type="button" class="btn btn-outline-primary" id="btnOptDel">추가</button>
-						<button type="button" class="btn btn-outline-primary" id="btnOptUse">삭제</button>
-						<button type="button" class="btn btn-outline-primary" id="btnReg">저장</button>
+						<button type="button" class="btn btn-outline-primary" id="btnDetailAdd">추가</button>
+						<button type="button" class="btn btn-outline-primary" id="btnDetailDel">삭제</button>
+						<button type="button" class="btn btn-outline-primary" id="btnDetailSave">저장</button>
 					</div>
 					<div id="cdd"></div>
 				</div>
@@ -83,11 +83,14 @@
 		
 		searchProc();		//검색
 		initProc();			//초기화
-		optDelProc();  		//선택삭제
-		optUseProc();  		//선택사용
-		optNoUseProc();		//선택미사용
-		batchRegProc();		//등록처리
-		gridinit();			//그리드 초기화
+		
+		btnMasterAddProc();  	//마스터 코드 그리드 행 추가
+		btnMasterDelProc(); 	//마스터 코드 그리드 행 삭제
+		btnMasterSaveProc();	//마스터 코드 저장
+		
+		btnDetailAddProc();  	//디테일 코드 그리드 행 추가
+		btnDetailDelProc(); 	//디테일 코드 그리드 행 삭제
+		btnDetailSaveProc();	//디테일 코드 저장
 		
 		
 		/*--------------
@@ -114,12 +117,11 @@
 		/*--------------
 		선택삭제 버튼 핸들러
 		----------------*/
-		function optDelProc(){
-			$("#btnOptDel").on("click", function(){
+		function btnMasterAddProc(){
+			$("#btnMasterAdd").on("click", function(){
 	
 			})
 		}
-		
 		
 		/*--------------
 		선택사용 버튼 핸들러
@@ -140,113 +142,161 @@
 		}
 		
 		/*--------------
-		선택미사용 서버 처리 ajax 요청
+		마스터 그리드 추가 핸들러
 		----------------*/
-		function useYnChangeProc(useYn){
-			let data = {useYn : useYn, stdNo : [] };
-			//선택된 퀴즈번호를 파라미터로 만듬
-			$("#frmList [name=stdNo]:checked").each(function(i,el){
-				data.stdNo.push(el.value);
+		function btnMasterAddProc(){
+			$("#btnMasterAdd").on("click", function(){
+				gridm.appendRow();
 			});
-			
-			if( ! confirm(data.stdNo + " 선택된 학생 상테를 변경할까요?") ) {
-				return;
-			}
-			//사용여부 변경 요청
-			$.ajax({
-				url : "stdUpdateUseYn",
-				method : 'post',
-				data : JSON.stringify(data),
-				contentType : "application/json",
-				dataType : 'json'
-			}).done(function(result){
-				alert(result.cnt + '건이 처리되었습니다.');
-				location.reload();
-			});	
 		}
 		
 		/*--------------
-		일괄등록(엑셀업로드) 버튼 핸들러
-		----------------*/			
-		function batchRegProc(){
-			$("#btnSave").on("click", function(){
-				  const excelFile = $("#file")[0];
-
-				  if(document.frmUpload.corsNo.value == "") {
-					  alert("과정을 선택해주세요");
-					  return;
-				  }
-				  if(excelFile.files.length === 0){
-				    alert("파일은 선택해주세요");
-				    return;
-				  }
-
-				  const formData = new FormData(document.frmUpload)
-				  
-				  $.ajax({
-				    type:"POST",
-				    url: "/batchReg",
-				    processData: false,
-				    contentType: false,
-				    data: formData,
-				    success: function(rtn){
-				    	if(rtn.result) {
-				    		console.log(rtn.cnt + " 건 등록완료")
-				    	} else {
-							alert(rtn.msg)
-				    	}
-				    },
-				    err: function(err){
-				      console.log("err:", err)
-				    }
-				  })
-			 });
+		마스터 그리드 삭제 핸들러
+		----------------*/
+		function btnMasterDelProc(){
+			$("#btnMasterDel").on("click", function(){
+				gridm.removeRow(gridm.getFocusedCell().rowKey);
+			});
 		}
 		
-		function gridinit(){
-			const gridData = [];
-			const gridm = new tui.Grid({
+		/*--------------
+		마스터 그리드 저장 핸들러
+		----------------*/
+		function btnMasterSaveProc(){
+			$("#btnMasterSave").on("click", function(){
+				gridm.request('modifyData');
+			});
+		}
+		
+		/*--------------
+		마스터 그리드 초기화
+		----------------*/
+		const gridm = (function (){
+			const dataSource = {
+					  api: {
+					    readData: { url: '/codeGroup', method: 'GET', initParams: { param: 'param' } },
+					    modifyData: { url: '/codeUpdagte', method: 'PUT' }
+					  },
+					  contentType: 'application/json',
+					};
+			
+			const grid = new tui.Grid({
 			      el: document.getElementById('cdm'),
-			      data: gridData,
+			      data: dataSource,
 			      scrollX: false,
-			      scrollY: false,
+			      scrollY: true,
+			      minBodyHeight : 300,
 			      columns: [
 			        {
-			          header: 'Name',
-			          name: 'name'
+			          header: '코드',
+			          name: 'cd',
+			          editor : 'text'
 			        },
 			        {
-			          header: 'Artist',
-			          name: 'artist'
+			          header: '코드명',
+			          name: 'nm',
+			          editor : 'text'
 			        },
 			        {
-			          header: 'Type',
-			          name: 'type'
+			          header: '사용',
+			          name: 'useYn',
+			          editor : 'text'
 			        }
 			      ]
 			    });
 			
-			const gridd = new tui.Grid({
-			      el: document.getElementById('cdd'),
-			      data: gridData,
-			      scrollX: false,
-			      scrollY: false,
-			      columns: [
-			        {
-			          header: 'Name',
-			          name: 'name'
-			        },
-			        {
-			          header: 'Artist',
-			          name: 'artist'
-			        },
-			        {
-			          header: 'Type',
-			          name: 'type'
-			        }
-			      ]
-			    });
+			grid.on('click', ev => {
+				  let r = ev.rowKey;
+				  
+			      let cd = gridm.getValue(r,"cd");
+			      
+			      //편집상태이거나 코드가 없으면 상세코드 조회안함
+			      if(cd == null || cd == '' || ev.columnName != 'cd') {
+			    	  return
+			      }
+			      
+			      gridd.setRequestParams({gpCd:cd});
+			      gridd.readData();
+			});
+			return grid;
+		})();
+		
+		
+		/*--------------
+		디테일 그리드 추가 핸들러
+		----------------*/
+		function btnDetailAddProc(){
+			$("#btnDetailAdd").on("click", function(){
+				let cd = gridm.getValue(gridm.getFocusedCell().rowKey, "cd");
+				if(cd == null || cd == '') {
+					alert("그룹코드를 선택하세요")
+					return;
+				}
+				gridd.appendRow({gpCd:cd});
+			});
 		}
+		
+		/*--------------
+		디테일 그리드 삭제 핸들러
+		----------------*/
+		function btnDetailDelProc(){
+			$("#btnDetailDel").on("click", function(){
+				gridd.removeRow(gridd.getFocusedCell().rowKey);
+			});
+		}
+		
+		/*--------------
+		디테일 그리드 저장 핸들러
+		----------------*/
+		function btnDetailSaveProc(){
+			$("#btnDetailSave").on("click", function(){
+				gridd.request('modifyData');
+			});
+		}
+		
+		/*--------------
+		디테일 그리드 초기화
+		----------------*/
+		const gridd = (function(){	
+			const dataSource = {
+					  api: {
+					    readData: { url: '/codeDetail', method: 'GET', initParams: { param: 'param' } },
+					    modifyData: { url: '/codeUpdagte', method: 'PUT' }
+					  },
+					  contentType: 'application/json',
+					};
+			
+			const grid = new tui.Grid({
+			      el: document.getElementById('cdd'),
+			      data: dataSource,
+			      scrollX: false,
+			      scrollY: true,
+			      minBodyHeight : 300,
+			      columns: [
+				        {
+					      header: '그룹코드',
+					      name: 'gpCd'
+						},
+				        {
+				          header: '코드',
+				          name: 'cd',
+				          editor : 'text'
+				        },
+				        {
+				          header: '코드명',
+				          name: 'nm',
+				          editor : 'text'
+				        },
+				        {
+				          header: '사용',
+				          name: 'useYn',
+				          editor : 'text'
+				        }
+
+				      ]
+			});
+			return grid;
+		})();
 	})
 	
 	</script>

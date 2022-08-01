@@ -28,11 +28,29 @@
                             )
                     VALUES ( 	#{cd},
                                 #{nm},
-                                #{gpCd},
+                                #{gpCd, jdbcType = VARCHAR},
                                 #{useYn}
                             )
     </insert>
-    
+
+<!-- 코드 수정  -->
+    <update id="updateCode" parameterType="CodeVO">
+        UPDATE COMMON 
+                  SET
+                       CD = #{cd},
+				       NM = #{nm},
+					   GP_CD =  #{gpCd, jdbcType = VARCHAR},
+					   USE_YN =  #{useYn}
+                WHERE  CD = #{cd}
+    </update>
+
+<!-- 코드 등록  -->
+    <insert id="deleteCode" parameterType="CodeVO">
+        delete  COMMON 
+         WHERE  CD = #{cd}
+    </insert>
+
+        
 <!-- 그룹 코드 조회  -->   
 	<select id="getGpCodeList" resultType="CodeVO">
 		SELECT  *

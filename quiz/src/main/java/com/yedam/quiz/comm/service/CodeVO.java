@@ -7,7 +7,9 @@ public class CodeVO {
 	private String cd;
 	private String nm;
 	private String gpCd;
-	private String useUn;
+	private String useYn;
+	
+	public CodeVO() {}
 	
 	//그룹코드 초기화
 	public CodeVO(String gpCd) {
