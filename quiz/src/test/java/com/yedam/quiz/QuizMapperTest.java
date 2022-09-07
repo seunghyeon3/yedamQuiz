@@ -17,9 +17,9 @@ public class QuizMapperTest {
 
 	@Test
 	public void list() {
-		List<QuizVO> list = mapper.getQuizList(null);
+//		List<QuizVO> list = mapper.getQuizList(null);
 		System.out.println("==================================");
 
-		System.out.println(list);
+//		System.out.println(list);
 	}
 }
