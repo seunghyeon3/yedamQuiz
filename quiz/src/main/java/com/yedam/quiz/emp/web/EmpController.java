@@ -25,13 +25,13 @@ public class EmpController {
     @Autowired
     EmpService empService;
 
-    @RequestMapping("test")
+    @RequestMapping("/admin/test")
     public String test(Model model, EmpVO empVO) {
         return "test";
     }
     
     // 단건조회   getEmp?employeeId=100
-    @RequestMapping("getEmp/{employeeId}") // getEmp?employeeId=aaaa
+    @RequestMapping("/admin/getEmp/{employeeId}") // getEmp?employeeId=aaaa
     public String getEmp(@PathVariable String employeeId
                         , Model model, EmpVO empVO) {
         empVO.setEmployeeId(employeeId);
@@ -40,14 +40,14 @@ public class EmpController {
     }
 
     // 목록조회
-    @RequestMapping("empList")
+    @RequestMapping("/admin/empList")
     public String empList(Model model, EmpVO empVO) {
         model.addAttribute("empList", empService.getEmpList(empVO));
         return "emp/getEmpList";
     }
     
     // 수정폼
-    @RequestMapping("updateFormEmp")
+    @RequestMapping("/admin/updateFormEmp")
     public String updateFormEmp(Model model, 
     		EmpVO empVO,
     		BindingResult bindingResult ) {  	
@@ -56,13 +56,13 @@ public class EmpController {
     }
 
     // 등록폼
-    @RequestMapping("insertFormEmp")
+    @RequestMapping("/admin/insertFormEmp")
     public String insertFormEmp(EmpVO vo, BindingResult bindingResult ) {
         return "emp/insertEmp";
     }
 
     // 등록처리
-    @RequestMapping("insertEmp")
+    @RequestMapping("/admin/insertEmp")
     public String insertEmp(@ModelAttribute("evo") EmpVO vo, // 1. 커맨트 객체
             Model model, @RequestParam String firstName, // 2. String
             HttpServletRequest request,
@@ -84,7 +84,7 @@ public class EmpController {
         // 서비스호출
         empService.empInsert(vo);
 
-        return "redirect:empList";
+        return "redirect:admin/empList";
     }
 }
 

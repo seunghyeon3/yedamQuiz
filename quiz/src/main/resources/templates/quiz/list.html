@@ -13,7 +13,7 @@
 	<!-- breadcrump / 도움말 -->
     <ol class="breadcrumb mb-4">
 	    <li><a class="float-right" data-bs-toggle="collapse" href="#collapseHelp" role="button" aria-expanded="false" aria-controls="collapseHelp">
-       	<img src="assets/img/free-icon-help-6269920.png" width="20px"></a></li>
+       	<img src="/assets/img/free-icon-help-6269920.png" width="20px"></a></li>
         <li class="breadcrumb-item"><a href="index.html">문제은행</a></li>
         <li class="breadcrumb-item active">문제조회</li>
     </ol>		
@@ -227,7 +227,7 @@
 			}
 			//사용여부 변경 요청
 			$.ajax({
-				url : "quizUpdateUseYn",
+				url : "/admin/quizUpdateUseYn",
 				method : 'post',
 				data : JSON.stringify(data),
 				contentType : "application/json",
@@ -252,7 +252,7 @@
 		----------------*/	
 		function regProc(){
 			$("#btnReg").on("click", function(){
-				location.href="/quizReg"
+				location.href="/admin/quizReg"
 			})
 		}
 		

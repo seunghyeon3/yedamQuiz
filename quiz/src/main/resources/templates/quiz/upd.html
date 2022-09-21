@@ -241,7 +241,7 @@
 		function delProc(){
 			$("#btnDel").on("click", function(){
 				if(confirm("삭제할까요?")){					
-					location.href ='quizDel?quizNo=' + '[[${quiz.quizNo}]]';
+					location.href ='/admin/quizDel?quizNo=' + '[[${quiz.quizNo}]]';
 				}
 			})
 		}		
@@ -252,7 +252,7 @@
 		----------------*/
 		function listProc(){
 			$("#btnList").on("click", function(){
-				location.href ='quizList';
+				location.href ='/admin/quizList';
 			})
 		}
 

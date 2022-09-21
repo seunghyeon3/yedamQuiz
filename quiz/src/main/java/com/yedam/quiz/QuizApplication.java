@@ -27,8 +27,8 @@ public class QuizApplication {
     	return sessionLocaleResolver;
     }
     
-    @RequestMapping("/")
+    @RequestMapping("/admin/home")
     public String index() {
-    	return "index";
+    	return "home";
     }
 }

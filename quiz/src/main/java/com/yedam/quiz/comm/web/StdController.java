@@ -30,7 +30,7 @@ public class StdController {
 	@Autowired StdMapper stdMapper;
 	
 	//학생 목록	
-	@GetMapping("/stdList")
+	@GetMapping("/admin/stdList")
 	public String stdList(Model model, StdVO vo, Paging paging) {
 		
 		//과정목록조회
@@ -48,7 +48,7 @@ public class StdController {
 	}
 
 	//학생개별 등록 페이지
-	@GetMapping("/stdReg")
+	@GetMapping("/admin/stdReg")
 	public String stdRegForm(Model model, StdVO vo) {
 		//과정목록조회
 		model.addAttribute("corss", stdMapper.getCorsList());
@@ -56,7 +56,7 @@ public class StdController {
 	}
 	
 	//학생 개별 등록 처리
-	@PostMapping("/stdReg")
+	@PostMapping("/admin/stdReg")
 	public String stdRegProc(Model model, StdVO vo, 
 							 RedirectAttributes rdt,
 			                 @RequestParam(required = false, defaultValue = "N") String contYn) {
@@ -75,13 +75,13 @@ public class StdController {
 
 	
 	//일괄 등록 처리(엑셀파일 업로드)
-	@PostMapping("/batchReg")
+	@PostMapping("/admin/batchReg")
 	public ResponseEntity<Map<String,Object>> batchReg(Model model, MultipartFile file, StdVO vo) {
 		return ResponseEntity.ok().body(stdService.batchReg(file, vo));
 	}
 	
 	//학생 수정 페이지
-	@GetMapping("/stdUpd")
+	@GetMapping("/admin/stdUpd")
 	public String stdUpdForm(Model model, StdVO vo) {
 		//공통코드조회
 		model.addAttribute("codes", codeService.getCodes("SBJT","TYP"));
@@ -90,7 +90,7 @@ public class StdController {
 	}
 	
 	//학생 수정 처리
-	@PostMapping("/stdUpd")
+	@PostMapping("/admin/stdUpd")
 	public String stdUpdProc(Model model, StdVO vo) {
 		//학생 수정
 		stdService.updateStudent(vo);
@@ -99,7 +99,7 @@ public class StdController {
 	}
 	
 	//학생 삭제 처리
-	@GetMapping("/stdDel")
+	@GetMapping("/admin/stdDel")
 	public String stdDelProc(Model model, StdVO vo) {
 		//학생 수정
 		stdService.deleteStudent(vo);
@@ -108,7 +108,7 @@ public class StdController {
 	}
 	
 	//선택사용/미사용변경
-	@PostMapping("/stdUpdateUseYn")  
+	@PostMapping("/admin/stdUpdateUseYn")  
 	@ResponseBody
 	public Map<String, Integer> updateUseYn(Model model, @RequestBody StdReqVO vo) {
 		//사용여부변경

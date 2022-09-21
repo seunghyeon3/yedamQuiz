@@ -38,7 +38,7 @@ public class ExamController {
 	@Autowired
 	private ApplService applService;
 
-	@RequestMapping("examRegistForm")
+	@RequestMapping("/admin/examRegistForm")
 	public String examRegistForm(Model model) {
 		model.addAttribute("quizList", quizService.getQuizList(null));
 		// 훈련생 리스트
@@ -48,7 +48,7 @@ public class ExamController {
 		return "exam/examRegist";
 	}
 
-	@RequestMapping("examRegist")
+	@RequestMapping("/admin/examRegist")
 	public String examRegist(ExamVO vo) {
 		examService.insertExam(vo);
 
@@ -64,10 +64,10 @@ public class ExamController {
 		}
 
 //		questionService.insertQuestion();
-		return "redirect:/examList";
+		return "redirect:/admin/examList";
 	}
 
-	@RequestMapping("examList")
+	@RequestMapping("/admin/examList")
 	public String examList(Model model, ExamVO vo, Paging paging) {
 		model.addAttribute("examList", examService.getExamList());
 
@@ -79,29 +79,29 @@ public class ExamController {
 		return "exam/examList";
 	}
 
-	@RequestMapping("getExamList")
+	@RequestMapping("/admin/getExamList")
 	public List<ExamVO> getExamList() {
 		return examService.getExamList();
 	}
 
-	@RequestMapping("examView")
+	@RequestMapping("/admin/examView")
 	public String examView(Model model, ExamVO vo) {
 		model.addAttribute("examList", examService.getExam(vo));
 		// 훈련생 리스트 넘겨줘야함.
 		return "exam/examMod";
 	}
 
-	@RequestMapping("examModify")
+	@RequestMapping("/admin/examModify")
 	public String examModify(ExamVO vo) {
 		System.out.println("수정쪽");
 		examService.updateExam(vo);
-		return "redirect:/examList";
+		return "redirect:/admin/examList";
 	}
 
 	@RequestMapping("examDelete")
 	public String examDelete(ExamVO vo) {
 		System.out.println("삭제쪽");
 		examService.deleteExam(vo);
-		return "redirect:/examList";
+		return "redirect:/admin/examList";
 	}
 }

@@ -30,7 +30,7 @@ public class QuizController {
 	@Autowired QuizService quizService;
 	
 	//문제 목록	
-	@GetMapping("/quizList")
+	@GetMapping("/admin/quizList")
 	public String quizList(Model model, QuizVO vo, Paging paging) {
 		
 		//공통코드조회
@@ -49,7 +49,7 @@ public class QuizController {
 
 	
 	//문제 등록 페이지
-	@GetMapping("/quizReg")
+	@GetMapping("/admin/quizReg")
 	public String quizRegForm(Model model, QuizVO vo) {
 		//공통코드조회
 		model.addAttribute("codes", codeService.getCodes("SBJT","TYP"));
@@ -57,16 +57,16 @@ public class QuizController {
 	}
 	
 	//문제 등록 처리
-	@PostMapping("/quizReg")
+	@PostMapping("/admin/quizReg")
 	public String quizRegProc(Model model, QuizVO vo, @RequestParam(required = false, defaultValue = "N") String contYn) {
 		//문제 등록
 		quizService.insertQuiz(vo);
 		
 		//저장 후 신규추가이면 등록페이지로 이동
 		if(contYn.equals("Y")) {			
-			return "redirect:/quizReg";
+			return "redirect:/admin/quizReg";
 		}else {
-			return "redirect:/quizList";
+			return "redirect:/admin/quizList";
 		}
 	}
 	

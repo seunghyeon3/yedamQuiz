@@ -14,7 +14,7 @@
 	<!-- breadcrump / 도움말 -->
     <ol class="breadcrumb mb-4">
 	    <li><a class="float-right" data-bs-toggle="collapse" href="#collapseHelp" role="button" aria-expanded="false" aria-controls="collapseHelp">
-       	<img src="assets/img/free-icon-help-6269920.png" width="20px"></a></li>
+       	<img src="/assets/img/free-icon-help-6269920.png" width="20px"></a></li>
         <li class="breadcrumb-item"><a href="index.html">학생관리</a></li>
     </ol>		
   
@@ -174,8 +174,8 @@
 		const gridm = (function (){
 			const dataSource = {
 					  api: {
-					    readData: { url: '/codeGroup', method: 'GET', initParams: { param: 'param' } },
-					    modifyData: { url: '/codeUpdagte', method: 'PUT' }
+					    readData: { url: '/admin/codeGroup', method: 'GET', initParams: { param: 'param' } },
+					    modifyData: { url: '/admin/codeUpdagte', method: 'PUT' }
 					  },
 					  contentType: 'application/json',
 					};
@@ -260,8 +260,8 @@
 		const gridd = (function(){	
 			const dataSource = {
 					  api: {
-					    readData: { url: '/codeDetail', method: 'GET', initParams: { param: 'param' } },
-					    modifyData: { url: '/codeUpdagte', method: 'PUT' }
+					    readData: { url: '/admin/codeDetail', method: 'GET', initParams: { param: 'param' } },
+					    modifyData: { url: '/admin/codeUpdagte', method: 'PUT' }
 					  },
 					  contentType: 'application/json',
 					};
