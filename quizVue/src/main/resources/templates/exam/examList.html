@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
+
+
+	<style>
+		tbody>tr>td:hover {
+			cursor: pointer;
+			background-color: darkgray;
+		}
+	</style>
+	
+	
+	
+	<h1>시험관리</h1>
+	<!-- 검색 해야하는 부분 -->
+	<br>
+	<div class="row">
+		<div class="col-sm-2">
+			<select class="form-select" aria-label="Default select example">
+				<option selected value="0">검색 카테고리 선택</option>
+				<option value="1">제목명</option>
+				<option value="2">과목명</option>
+			</select>
+		</div>
+		<div class="col-sm-8">
+			<input type="text" class="form-control">
+		</div>
+		<div class="col-sm-2">
+			<button type="button" class="btn btn-dark" onclick="searchList()">검색</button>
+		</div>
+		<br><br><br>
+		<div class="col-sm-9">
+		</div>
+		<div class="col-sm-12">
+			<table class="table table-striped" id="examList">
+				<thead>
+					<tr>
+						<th>
+							시험번호
+						</th>
+						<th>
+							시혐명
+						</th>
+						<th>
+							강의실
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="exam : ${examList}" onclick="showContent(this)">
+						<td th:text="${exam.examNo}"></td>
+						<td th:text="${exam.examNm}"></td>
+						<td th:text="${exam.ltRoom}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<nav aria-label="...">
+		<ul class="pagination">
+		<!-- startPage가 1 이라면 disabled를 클래스에 추가 -->
+			<li class="page-item" th:classappend="${paging.startPage} == 1 ? disabled">
+				<a class="page-link" th:href="|javascript:gopage(${paging.startPage})|">Previous</a>
+			</li>
+			<!-- # numbers 객체 사용, * numbers객체가 포함하는 내용 -->
+			<li th:each="num : *{#numbers.sequence(paging.startPage, paging.endPage)}" class="page-item"
+				th:addclass="${num} == ${paging.page} ? active">
+				<a class="page-link" th:href="|javascript:gopage(${num})|" th:text="${num}">2</a>
+			</li>
+
+			<li class="page-item" th:classappend="${paging.endPage} <= ${paging.lastPage} ? disabled">
+				<a class="page-link" th:href="|javascript:gopage(${paging.endPage})|">Next</a>
+			</li>
+		</ul>
+	</nav>
+	<script>
+	function gopage(p){
+		frmSearch.page.value = p;
+		frmSearch.submit();		
+	}
+	
+		function searchList() {
+			let list = document.getElementById("examList");
+			fetch('')
+				.then((response) => response.json())
+				.then((data) => console.log(data));
+		}
+		function showContent(ev) {
+			window.location.href = "/examView?examNo=" + ev.children[0].textContent
+		}
+	</script>
+</th:block>

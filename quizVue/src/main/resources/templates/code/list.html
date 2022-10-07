@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tui-grid/4.21.3/tui-grid.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tui-grid/4.21.3/tui-grid.css" />
+	<style>
+		.ctnt { cursor : pointer; text-decoration: underline; }
+		#frmList th, #frmList td { text-align: center}
+	</style>
+	<!--  페이지 타이틀 -->
+	<h1 class="mt-4">코드관리</h1>
+	<!-- breadcrump / 도움말 -->
+    <ol class="breadcrumb mb-4">
+	    <li><a class="float-right" data-bs-toggle="collapse" href="#collapseHelp" role="button" aria-expanded="false" aria-controls="collapseHelp">
+       	<img src="assets/img/free-icon-help-6269920.png" width="20px"></a></li>
+        <li class="breadcrumb-item"><a href="index.html">학생관리</a></li>
+    </ol>		
+  
+    <!--  페이지 도움말 시작 -->
+	<div class="collapse  g-3 mb-2" id="collapseHelp">
+		<div class="card card-body">학생관리.<br>. <br>. <br>.</div>
+	</div>
+    <!--  페이지 도움말 종료 -->
+    
+	<div class="card mb-4">
+	    <!--  검색 폼 시작 -->
+        <!-- <i class="fas fa-table me-1"></i> -->
+        <div class="card-header">
+			<form name="frmSearch" id="frmSearch">
+				<div class="row g-3">
+					<label for="sbjtCd" class="col-sm-1 col-form-label text-end">이름</label>
+					<div class="col-sm-3">
+						<input class="form-control" id="stdNm" name="stdNm" > 
+					</div>
+
+					<label for="useYn" class="col-sm-1 col-form-label text-end">사용여부</label>
+					<div class="col-sm-3">
+						<!-- <select name="useYn" id="useYn" class="form-select"><option value="Y">사용<option value="N">미사용</select> -->
+						<div class="form-check form-switch">
+						  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="useYn" value="1" checked>
+						</div>  
+					</div>
+				</div>
+				<div class="row g-3 justify-content-end">
+					<div class="btn-group col-sm-3" role="group">
+						<button type="submit" class="btn btn-primary" id="btnSearch">검색</button>
+						<button type="button" class="btn btn-warning" id="btnInit">초기화</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<!--  검색폼 종료 -->
+
+	
+		<!--  문제 목록 시작 -->
+        <div class="card-body">
+			<div class="row">
+				<div class="col-5 border">
+					<div class="g-3 text-end">
+						<button type="button" class="btn btn-outline-primary" id="btnMasterAdd">추가</button>
+						<button type="button" class="btn btn-outline-primary" id="btnMasterDel">삭제</button>
+						<button type="button" class="btn btn-outline-primary" id="btnMasterSave">저장</button>
+					</div>				
+					<div id="cdm"></div>
+				</div>
+				<div class="col-7 border">
+					<div class="g-3 text-end">
+						<button type="button" class="btn btn-outline-primary" id="btnDetailAdd">추가</button>
+						<button type="button" class="btn btn-outline-primary" id="btnDetailDel">삭제</button>
+						<button type="button" class="btn btn-outline-primary" id="btnDetailSave">저장</button>
+					</div>
+					<div id="cdd"></div>
+				</div>
+			</div>
+		</div>
+     </div>
+     <!--  문제 목록 종료 -->
+     
+	<script>
+	$(function(){
+		
+		searchProc();		//검색
+		initProc();			//초기화
+		
+		btnMasterAddProc();  	//마스터 코드 그리드 행 추가
+		btnMasterDelProc(); 	//마스터 코드 그리드 행 삭제
+		btnMasterSaveProc();	//마스터 코드 저장
+		
+		btnDetailAddProc();  	//디테일 코드 그리드 행 추가
+		btnDetailDelProc(); 	//디테일 코드 그리드 행 삭제
+		btnDetailSaveProc();	//디테일 코드 저장
+		
+		
+		/*--------------
+		검색 버튼 핸들러
+		----------------*/
+		function searchProc(){
+			$("#btnSearch").on("click", function(){
+				$("#frmSearch").submit();
+			})
+		}
+		
+		/*--------------
+		초기화
+		----------------*/
+		function initProc(){
+			$("#btnInit").on("click", function(){
+				frmSearch.reset();
+				$("#frmSearch").find('select, type:text').each(function(){
+					$(this).val('');
+				});
+			})
+		}		
+		
+		/*--------------
+		선택삭제 버튼 핸들러
+		----------------*/
+		function btnMasterAddProc(){
+			$("#btnMasterAdd").on("click", function(){
+	
+			})
+		}
+		
+		/*--------------
+		선택사용 버튼 핸들러
+		----------------*/
+		function optUseProc(){
+			$("#btnOptUse").on("click", function(){
+				useYnChangeProc('1');			
+			})
+		}
+
+		/*--------------
+		선택미사용 버튼 핸들러
+		----------------*/
+		function optNoUseProc(){
+			$("#btnOptNoUse").on("click", function(){
+				useYnChangeProc('0');
+			})
+		}
+		
+		/*--------------
+		마스터 그리드 추가 핸들러
+		----------------*/
+		function btnMasterAddProc(){
+			$("#btnMasterAdd").on("click", function(){
+				gridm.appendRow();
+			});
+		}
+		
+		/*--------------
+		마스터 그리드 삭제 핸들러
+		----------------*/
+		function btnMasterDelProc(){
+			$("#btnMasterDel").on("click", function(){
+				gridm.removeRow(gridm.getFocusedCell().rowKey);
+			});
+		}
+		
+		/*--------------
+		마스터 그리드 저장 핸들러
+		----------------*/
+		function btnMasterSaveProc(){
+			$("#btnMasterSave").on("click", function(){
+				gridm.request('modifyData');
+			});
+		}
+		
+		/*--------------
+		마스터 그리드 초기화
+		----------------*/
+		const gridm = (function (){
+			const dataSource = {
+					  api: {
+					    readData: { url: '/codeGroup', method: 'GET', initParams: { param: 'param' } },
+					    modifyData: { url: '/codeUpdagte', method: 'PUT' }
+					  },
+					  contentType: 'application/json',
+					};
+			
+			const grid = new tui.Grid({
+			      el: document.getElementById('cdm'),
+			      data: dataSource,
+			      scrollX: false,
+			      scrollY: true,
+			      minBodyHeight : 300,
+			      columns: [
+			        {
+			          header: '코드',
+			          name: 'cd',
+			          editor : 'text'
+			        },
+			        {
+			          header: '코드명',
+			          name: 'nm',
+			          editor : 'text'
+			        },
+			        {
+			          header: '사용',
+			          name: 'useYn',
+			          editor : 'text'
+			        }
+			      ]
+			    });
+			
+			grid.on('click', ev => {
+				  let r = ev.rowKey;
+				  
+			      let cd = gridm.getValue(r,"cd");
+			      
+			      //편집상태이거나 코드가 없으면 상세코드 조회안함
+			      if(cd == null || cd == '' || ev.columnName != 'cd') {
+			    	  return
+			      }
+			      
+			      gridd.setRequestParams({gpCd:cd});
+			      gridd.readData();
+			});
+			return grid;
+		})();
+		
+		
+		/*--------------
+		디테일 그리드 추가 핸들러
+		----------------*/
+		function btnDetailAddProc(){
+			$("#btnDetailAdd").on("click", function(){
+				let cd = gridm.getValue(gridm.getFocusedCell().rowKey, "cd");
+				if(cd == null || cd == '') {
+					alert("그룹코드를 선택하세요")
+					return;
+				}
+				gridd.appendRow({gpCd:cd});
+			});
+		}
+		
+		/*--------------
+		디테일 그리드 삭제 핸들러
+		----------------*/
+		function btnDetailDelProc(){
+			$("#btnDetailDel").on("click", function(){
+				gridd.removeRow(gridd.getFocusedCell().rowKey);
+			});
+		}
+		
+		/*--------------
+		디테일 그리드 저장 핸들러
+		----------------*/
+		function btnDetailSaveProc(){
+			$("#btnDetailSave").on("click", function(){
+				gridd.request('modifyData');
+			});
+		}
+		
+		/*--------------
+		디테일 그리드 초기화
+		----------------*/
+		const gridd = (function(){	
+			const dataSource = {
+					  api: {
+					    readData: { url: '/codeDetail', method: 'GET', initParams: { param: 'param' } },
+					    modifyData: { url: '/codeUpdagte', method: 'PUT' }
+					  },
+					  contentType: 'application/json',
+					};
+			
+			const grid = new tui.Grid({
+			      el: document.getElementById('cdd'),
+			      data: dataSource,
+			      scrollX: false,
+			      scrollY: true,
+			      minBodyHeight : 300,
+			      columns: [
+				        {
+					      header: '그룹코드',
+					      name: 'gpCd'
+						},
+				        {
+				          header: '코드',
+				          name: 'cd',
+				          editor : 'text'
+				        },
+				        {
+				          header: '코드명',
+				          name: 'nm',
+				          editor : 'text'
+				        },
+				        {
+				          header: '사용',
+				          name: 'useYn',
+				          editor : 'text'
+				        }
+
+				      ]
+			});
+			return grid;
+		})();
+	})
+	
+	</script>
+</th:block>

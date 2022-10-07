@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.quiz.exam.mapper.ExamMapper">
+
+	<!-- 단건조회 -->
+	<select id="getExam" parameterType="ExamVO" resultType="ExamVO">
+		SELECT *
+		FROM EXAM
+		WHERE EXAM_NO = #{examNo}
+	</select>
+
+	<!-- 전체조회 -->
+	<select id="getExamList" resultType="ExamVO">
+		SELECT *
+		FROM EXAM
+		ORDER BY EXAM_NO
+	</select>
+
+	<insert id="insertQuiz" parameterType="QuizVO">
+		INSERT INTO QUIZ VALUES(
+		( SELECT NVL(MAX(EXAM_NO),0)+1 FROM EXAM ),
+		#{examNm},
+		#{examDesct},
+		#{ltRoom},
+		#{sbjtCd},
+		SYSDATE,
+		#{startDttm},
+		#{endDttm},
+		#{rcntCt},
+		#{useYn},
+		#{corsNo},
+		#{orgNo},
+		#{ttScor}
+		)
+	</insert>
+
+	<insert id="insertExam" parameterType="ExamVO">
+		<selectKey resultType="String" keyProperty="corsNo" order="BEFORE">
+			SELECT CORS_NO FROM CORS WHERE LT_ROOM = #{ltRoom} AND USE_YN = '1'
+		</selectKey>
+		INSERT INTO EXAM VALUES(
+		( SELECT NVL(MAX(EXAM_NO),0)+1 FROM EXAM ),
+		#{examNm},
+		#{examDesct},
+		#{ltRoom},
+		#{sbjtCd},
+		SYSDATE,
+		#{startDttm},
+		#{endDttm},
+		#{rcntCt},
+		#{useYn},
+		#{corsNo},
+		#{orgNo},
+		#{ttScor}
+		)
+
+
+	</insert>
+
+	<update id="updateExam" parameterType="ExamVO">
+		UPDATE EXAM SET
+		-- 조건 필요
+		WHERE EXAM_NO = #{examNo}
+	</update>
+
+	<delete id="deleteExam" parameterType="ExamVO">
+		DELETE FROM EXAM WHERE EXAM_NO = #{examNo}
+	</delete>
+
+	<!-- row갯수확인 -->
+	<select id="getCount" parameterType="ExamVO" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM EXAM
+	</select>
+</mapper>

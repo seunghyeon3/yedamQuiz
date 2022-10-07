@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.quiz.quiz.mapper.QuizMapper">
+
+<!-- 단건조회  -->
+	<select id="getQuiz" parameterType="QuizVO" resultType="QuizVO">
+		SELECT  *
+		FROM QUIZ
+		WHERE QUIZ_NO = #{quizNo}
+	</select>
+	
+
+<sql id="quizCondition">
+		  <where>
+		  	<if test="typCd != null and typCd != ''">
+		  		AND TYP_CD = #{typCd}
+		  	</if>
+		  	<if test="sbjtCd != null and sbjtCd != ''">
+		  		AND SBJT_CD = #{sbjtCd}
+		  	</if>
+		  	<if test="useYn != null and useYn != ''">
+		  		AND USE_YN = #{useYn}
+		  	</if>
+		  	<if test="quizCtnt != null and quizCtnt != ''">
+		  		AND quiz_ctnt like '%' || #{quizCtnt} || '%'
+		  	</if>
+		  </where>
+</sql>		  
+<!-- 전체조회  -->			  
+	<select id="getQuizList" resultType="QuizVO">
+	<if test="end>0">
+	SELECT B.* FROM ( SELECT A.*, ROWNUM RN FROM (
+	</if>
+		SELECT   QUIZ_NO
+				,SBJT_CD
+		        ,FIND_CD_NM(SBJT_CD, 'SBJT') AS SBJT_NM
+				,QUIZ_CTNT
+				,TYP_CD
+				,FIND_CD_NM(TYP_CD, 'TYP')  AS TYP_NM
+				,ANSR
+				,DESCT
+				,USE_YN
+				,REG_DT
+		  FROM QUIZ E
+		  <include refid="quizCondition"></include>
+		 ORDER BY  QUIZ_NO DESC
+	<if test="end>0">
+	) A ) B WHERE RN BETWEEN #{start} AND #{end}
+	</if>
+	</select>
+
+    <insert id="insertQuiz" parameterType="QuizVO">
+    <selectKey resultType="string" keyProperty="quizNo" order="BEFORE">
+     	SELECT NVL(MAX(QUIZ_NO),0)+1 FROM QUIZ 
+    </selectKey>
+        INSERT INTO QUIZ (  QUIZ_NO
+							,SBJT_CD
+							,QUIZ_CTNT
+							,TYP_CD
+							,ANSR
+							,DESCT
+							,USE_YN
+							,REG_DT
+                                )
+                        VALUES(
+                                #{quizNo},
+                                #{sbjtCd},
+                                #{quizCtnt},
+                                #{typCd},
+                                #{ansr},
+                                #{desct},
+                                nvl(#{useYn}, 'N'),
+                                sysdate
+                                )
+    </insert>
+
+    <update id="updateQuiz" parameterType="QuizVO">
+        UPDATE  QUIZ SET                           
+				SBJT_CD    = #{sbjtCd}
+				,QUIZ_CTNT = #{quizCtnt}
+				,TYP_CD    = #{typCd}
+				,ANSR      = #{ansr}
+				,DESCT     = #{desct}
+				,USE_YN    = nvl(#{useYn}, 'N')
+		 WHERE  QUIZ_NO = #{quizNo}
+    </update>
+    
+    <update id="updateUseYn" parameterType="QuizReqVO">
+        UPDATE  QUIZ SET    
+				USE_YN    = #{useYn}
+		 WHERE  QUIZ_NO in 
+		 <foreach collection="quizNo" open="(" close=")" separator="," item="no">#{no}</foreach>
+    </update>
+        
+    <select id="getCount" resultType="int">
+    	SELECT COUNT(*) 
+    	  FROM QUIZ
+    	<include refid="quizCondition"></include>
+    </select>
+    
+    <delete id="deleteQuiz">
+    	DELETE QUIZ
+    	 WHERE QUIZ_NO = #{quizNo}
+    </delete>
+</mapper>

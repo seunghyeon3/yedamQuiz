@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+
+<th:block layout:fragment="content">
+	<h1>사원등록</h1>
+	<form action="#" th:action="@{registerCourse}" method="post">
+		<div><label for="corsNo" class="form-label">과정번호</label>
+			<input name="corsNo" id="corsNo" class="form-control"></div>
+
+		<div><label for="corsNm" class="form-label">과정명</label>
+			<input name="corsNm" id="corsNm" class="form-control"></div>
+
+		<div><label for="sdt" class="form-label">시작일자</label>
+			<input name="sdt" id="sdt"  class="form-control">
+	     </div> 
+
+		<div><label for="edt"  class="form-label">종료일자</label> 
+		<input name="edt" id="edt" class="form-control"></div> 
+			
+		<div><label for="ltRoom"  class="form-label">강의실</label> 
+		<input name="ltRoom" id="ltRoom" class="form-control"></div> 
+	
+		<div><label for="useYn"  class="form-label">사용여부</label>
+		<input name="useYn" id="useYn" class="form-control"></div> 
+	<button class="btn btn-primary">등록</button>
+</form>
+</th:block>

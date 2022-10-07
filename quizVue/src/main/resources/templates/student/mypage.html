@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<title>마이 페이지</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+	crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col">
+				<div class="card shadow-lg border-0 rounded-lg mt-5">
+					<div class="card-header">
+						<h3 class="text-center font-weight-light my-4"
+							th:text="${ student.corsNm }"></h3>
+					</div>
+					<div
+						class="card-body row justify-content-center align-items-center g-2 mb-2"
+						th:each="appl : ${ applList }"
+						th:onclick="getApplInfo( [[ ${appl} ]])">
+						<div class="col-6">
+							<div class="p-3 border bg-light text-center"
+								th:text="${ appl.examNm }"></div>
+						</div>
+						<div class="col-6">
+							<div class="p-3 border bg-light text-center"
+								th:text="${ appl.startDttm } + ' ~ ' + ${ appl.endDttm }"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="layoutAuthentication_footer">
+		<footer class="py-4 bg-light mt-auto">
+			<div class="container-fluid px-4">
+				<div class="d-flex align-items-center justify-content-between small">
+					<div class="text-muted">Copyright &copy; 예담직업전문학교 2022</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+	<form id="info">
+		<input type="hidden" id="stdNo" name="stdNo"> <input
+			type="hidden" id="examNo" name="examNo">
+	</form>
+	<script>
+		function getApplInfo(applInfo) {
+			let form = document.getElementById('info');
+			form.stdNo.value = applInfo.stdNo;
+			form.examNo.value = applInfo.examNo;
+
+			form.method = 'POST';
+			if (applInfo.applDttm == null) {
+				form.action = "studentExam";
+			} else {
+				form.action = "studentResult";
+			}
+			form.submit();
+		}
+	</script>
+</body>
+</html>

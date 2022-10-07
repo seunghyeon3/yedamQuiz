@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">  
+
+	<!--  페이지 타이틀 -->
+	<h1 class="mt-4">학생등록</h1>
+  
+    <!--  페이지 도움말 시작 --> 
+	<div class="collapse  g-3 mb-2" id="collapseHelp">
+		<div class="card card-body">학생관리.<br>. <br>. <br>.</div>
+	</div>
+    <!--  페이지 도움말 종료 -->
+    
+	<!--  학생 등록 폼 시작 -->  
+	<form name="frmReg" id="frmReg" method="post">
+		<!--  과정명    -->
+		<div class="mb-3 row">
+			<label for="corsNo" class="col-sm-2 col-form-label">과정</label>
+			<div class="col-sm-6">
+				<select class="form-select" aria-label="Default select example" id="corsNo" name="corsNo" >
+				  <option selected value="">과정선택</option>  
+				  <option th:each="cors : ${corss}" 
+				          th:value="${cors.corsNo}" th:text="|${cors.ltRoom}강 ${cors.corsNm}(${cors.sdt}~${cors.edt})|"
+				          th:selected="${cors.corsNo}==${stdVO.corsNo}"></option>
+				</select> 
+			</div>
+		</div>
+		
+		<!--  학생이름      -->
+		<div class="mb-3 row">
+		  <label for="quizCtnt" class="col-sm-2 col-form-label">학생이름</label>
+		  <div class="col-sm-10">
+		    <input type="text" id="stdNm" name="stdNm">
+		  </div>
+		</div>	
+
+		<!--  출생년도      -->
+		<div class="mb-3 row">
+		  <label for="year" class="col-sm-2 col-form-label">출생년도</label>
+		  <div class="col-sm-10">
+		    <input type="text" id="year" name="year"> 
+		  </div>
+		</div>	
+					
+		<!--  사용여부    -->
+		<div class="mb-3 row">
+		  <label for="useYn" class="col-sm-2 col-form-label">사용여부</label>
+		  <div class="col-sm-10">
+			<div class="form-check form-switch">
+			  <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="useYn" value="1" checked>
+			</div>   
+		  </div>
+		</div>			
+	</form>
+	<!--  학생 등록 폼 종료 -->
+
+	<!--  버튼 그룹 시작 -->
+	<div>
+		<!-- <div class="btn-group" role="group" aria-label="Basic example"> -->
+			<button type="button" class="btn btn-success" id="btnSave">저장</button>
+			<button type="button" class="btn btn-warning" id="btnSaveNew">저장 후 신규추가</button>
+		<!-- </div> -->
+		<div class="btn-group" role="group" aria-label="Basic example">
+			<button type="button" class="btn btn-warning" id="btnList">목록</button>  
+		</div>
+	</div>
+	<!--  버튼 그룹 종료 -->  
+	
+	<script>
+	
+	$(function(){
+		init();
+		saveProc();			//저장
+		saveNewProc();		//저장 후 신규추가
+		listProc();  		//목록  
+
+		
+		/*--------------
+		초기화
+		----------------*/			
+		function init(){
+
+		}
+
+		
+		
+		/*--------------
+		저장
+		----------------*/
+		function saveProc(){
+			$("#btnSave").on("click", function(){
+				//과목선택여부 확인
+				if( $("#sbjtCd").val() ==""){
+					alert("과목을 선택하세요");
+					return;
+				}
+				$("#frmReg").submit();  
+			}) 
+		}
+		
+		/*--------------
+		저장후 신규추가
+		----------------*/
+		function saveNewProc(){
+			$("#btnSaveNew").on("click", function(){
+				
+			})
+		}		
+		
+		
+		/*--------------
+		목록
+		----------------*/
+		function listProc(){
+			$("#btnList").on("click", function(){
+				
+			})
+		}
+
+		
+	})
+	
+	</script>
+</th:block>
