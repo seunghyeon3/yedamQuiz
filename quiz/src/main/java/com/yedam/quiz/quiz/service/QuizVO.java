@@ -24,6 +24,6 @@ public class QuizVO extends SearchVO {
 	private String rightRate;   //정답율
 	private Date   regDt;		//등록일자
 	private String regName;		//등록자  -- 추가할것
-	
+	private String selected = "true";
 	private List<SectionVO> sections;  //보기 리스트
 }
