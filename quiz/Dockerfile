@@ -1,5 +1,5 @@
 FROM openjdk:11-jre
 ARG JAR_FILE=target/*.jar
+COPY wallet_quiz/* /home/wallet_quiz
 COPY ${JAR_FILE} app.jar
-COPY wallet_quiz/sqlnet.ora sqlnet.ora
 ENTRYPOINT ["java","-jar", "/app.jar"]
