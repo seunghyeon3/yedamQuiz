@@ -24,7 +24,12 @@ export default {
     TopNav,
     SideNav,
     LayoutFooter
-  }
+  },
+  mounted() {
+    setInterval(()=>{
+      this.$store.state.n++;
+    },4000);
+  }  
 }
 </script>
 

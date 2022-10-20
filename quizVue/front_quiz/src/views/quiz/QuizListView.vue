@@ -71,6 +71,7 @@
         </div>
         <!--  검색폼 종료 -->
         <input :value="userno">
+        <input :value="localn">
         <!--  문제 목록 시작 -->
         <div class='card-body'>
           <!--  버튼 그룹 시작 -->
@@ -126,6 +127,7 @@ import axios from 'axios'
 export default {
   data() {
     return {
+      localn: this.$store.state.n,
       userno: '',
       codes: {},
       quizList: [],
@@ -136,6 +138,11 @@ export default {
   mounted() {
     this.getList()
     this.userno = this.$session.get('user_no')
+
+    this.$store.watch(()=> this.$store.getters.getN, n=>{
+      console.log('watched:', n)
+      this.localn = this.$store.state.n
+    })
   },
   watch: {
     usernoW() {

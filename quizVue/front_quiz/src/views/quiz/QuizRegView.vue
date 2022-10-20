@@ -81,7 +81,7 @@
                 class="btn btn-outline-primary btnSectDel">-</button> <input type="radio" name="ansrMulti"
                 :value="idx+1"><span class="sectNum">{{idx+1}}</span></label>
             <div class="col-sm-10">
-              <textarea rows="3" cols="60" v-model="section"></textarea>
+              <textarea rows="3" cols="60" ></textarea>
             </div>
           </div>
         </div>
