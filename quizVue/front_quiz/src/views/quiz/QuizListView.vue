@@ -140,7 +140,6 @@ export default {
     this.userno = this.$session.get('user_no')
 
     this.$store.watch(()=> this.$store.getters.getN, n=>{
-      console.log('watched:', n)
       this.localn = this.$store.state.n
     })
   },
