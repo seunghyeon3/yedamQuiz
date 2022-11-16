@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 @Data
 public class GridData<T> {
-	private List<CodeVO> updatedRows;
-	private List<CodeVO> deletedRows;
-	private List<CodeVO> createdRows;
+	private List<T> updatedRows;
+	private List<T> deletedRows;
+	private List<T> createdRows;
 }
